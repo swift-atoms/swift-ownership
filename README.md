@@ -95,7 +95,7 @@ The package uses a **primary decomposition** — consumers depend on the specifi
         .product(name: "Ownership Inout", package: "swift-ownership"),
         // Heap-owned cells
         .product(name: "Ownership Unique", package: "swift-ownership"),
-        .product(name: "Ownership Shared Primitives", package: "swift-ownership"),
+        .product(name: "Ownership Shared", package: "swift-ownership"),
         .product(name: "Ownership Mutable", package: "swift-ownership"),
         // Reusable atomic slot + one-shot latch
         .product(name: "Ownership Slot", package: "swift-ownership"),

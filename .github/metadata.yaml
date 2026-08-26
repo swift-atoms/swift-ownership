@@ -1,8 +1,8 @@
 # .github/metadata.yaml
-# Triaged 2026-04-29 — refined for the swift-primitives 0.1.0 release-cohort path.
+# Triaged 2026-04-29 — refined for the swift-molecules 0.1.0 release-cohort path.
 description: "Stdlib-parity ~Copyable ownership types — borrows, inouts, unique/copy-on-write cells, atomic slots, and cross-boundary transfer tokens — for Swift."
 topics:
-  - primitives
+  - molecules
   - ownership
   - lifetime
   - type-safety
