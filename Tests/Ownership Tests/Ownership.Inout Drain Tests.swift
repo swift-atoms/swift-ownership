@@ -1,4 +1,4 @@
-import Ownership_Primitives
+import Ownership
 import Testing
 
 @Suite

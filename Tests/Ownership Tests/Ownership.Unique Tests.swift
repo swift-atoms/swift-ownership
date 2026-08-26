@@ -1,6 +1,6 @@
 import Testing
 
-@testable import Ownership_Primitives_Test_Support
+@testable import Ownership_Test_Support
 
 @Suite
 struct `Ownership Unique Tests` {

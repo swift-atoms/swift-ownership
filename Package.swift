@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "swift-ownership-primitives",
+    name: "swift-ownership",
     platforms: [
         .macOS(.v27),
         .iOS(.v27),
@@ -19,64 +19,64 @@ let package = Package(
         ),
 
         .library(
-            name: "Ownership Borrow Primitives",
-            targets: ["Ownership Borrow Primitives"]
+            name: "Ownership Borrow",
+            targets: ["Ownership Borrow"]
         ),
         .library(
-            name: "Ownership Inout Primitives",
-            targets: ["Ownership Inout Primitives"]
+            name: "Ownership Inout",
+            targets: ["Ownership Inout"]
         ),
         .library(
-            name: "Ownership Unique Primitives",
-            targets: ["Ownership Unique Primitives"]
+            name: "Ownership Unique",
+            targets: ["Ownership Unique"]
         ),
         .library(
-            name: "Ownership Immutable Primitives",
-            targets: ["Ownership Immutable Primitives"]
+            name: "Ownership Immutable",
+            targets: ["Ownership Immutable"]
         ),
         .library(
-            name: "Ownership Mutable Primitives",
-            targets: ["Ownership Mutable Primitives"]
+            name: "Ownership Mutable",
+            targets: ["Ownership Mutable"]
         ),
         .library(
-            name: "Ownership Slot Primitives",
-            targets: ["Ownership Slot Primitives"]
+            name: "Ownership Slot",
+            targets: ["Ownership Slot"]
         ),
         .library(
-            name: "Ownership Latch Primitives",
-            targets: ["Ownership Latch Primitives"]
+            name: "Ownership Latch",
+            targets: ["Ownership Latch"]
         ),
         .library(
-            name: "Ownership Box Primitives",
-            targets: ["Ownership Box Primitives"]
+            name: "Ownership Box",
+            targets: ["Ownership Box"]
         ),
         .library(
-            name: "Ownership Transfer Primitives",
-            targets: ["Ownership Transfer Primitives"]
+            name: "Ownership Transfer",
+            targets: ["Ownership Transfer"]
         ),
         .library(
-            name: "Ownership Transfer Erased Primitives",
-            targets: ["Ownership Transfer Erased Primitives"]
-        ),
-
-        .library(
-            name: "Ownership Primitives Standard Library Integration",
-            targets: ["Ownership Primitives Standard Library Integration"]
+            name: "Ownership Transfer Erased",
+            targets: ["Ownership Transfer Erased"]
         ),
 
         .library(
-            name: "Ownership Primitives",
-            targets: ["Ownership Primitives"]
+            name: "Ownership Standard Library Integration",
+            targets: ["Ownership Standard Library Integration"]
         ),
 
         .library(
-            name: "Ownership Primitives Test Support",
-            targets: ["Ownership Primitives Test Support"]
+            name: "Ownership",
+            targets: ["Ownership"]
+        ),
+
+        .library(
+            name: "Ownership Test Support",
+            targets: ["Ownership Test Support"]
         ),
     ],
     dependencies: [
         .package(
-            url: "https://github.com/swift-primitives/swift-tagged-primitives.git",
+            url: "https://github.com/swift-molecules/swift-tagged.git",
             branch: "main"
         )
     ],
@@ -88,111 +88,111 @@ let package = Package(
         ),
 
         .target(
-            name: "Ownership Borrow Primitives",
+            name: "Ownership Borrow",
             dependencies: [
                 "Ownership Primitive",
-                .product(name: "Tagged Primitives", package: "swift-tagged-primitives"),
+                .product(name: "Tagged", package: "swift-tagged"),
             ]
         ),
         .target(
-            name: "Ownership Inout Primitives",
+            name: "Ownership Inout",
             dependencies: [
                 "Ownership Primitive"
             ]
         ),
         .target(
-            name: "Ownership Unique Primitives",
+            name: "Ownership Unique",
             dependencies: [
                 "Ownership Primitive"
             ]
         ),
         .target(
-            name: "Ownership Immutable Primitives",
+            name: "Ownership Immutable",
             dependencies: [
                 "Ownership Primitive"
             ]
         ),
         .target(
-            name: "Ownership Mutable Primitives",
+            name: "Ownership Mutable",
             dependencies: [
                 "Ownership Primitive"
             ]
         ),
         .target(
-            name: "Ownership Slot Primitives",
+            name: "Ownership Slot",
             dependencies: [
                 "Ownership Primitive"
             ]
         ),
         .target(
-            name: "Ownership Latch Primitives",
+            name: "Ownership Latch",
             dependencies: [
                 "Ownership Primitive"
             ]
         ),
         .target(
-            name: "Ownership Box Primitives",
+            name: "Ownership Box",
             dependencies: [
                 "Ownership Primitive"
             ]
         ),
         .target(
-            name: "Ownership Transfer Primitives",
+            name: "Ownership Transfer",
             dependencies: [
                 "Ownership Primitive",
-                "Ownership Latch Primitives",
+                "Ownership Latch",
             ]
         ),
         .target(
-            name: "Ownership Transfer Erased Primitives",
+            name: "Ownership Transfer Erased",
             dependencies: [
-                "Ownership Transfer Primitives",
-                "Ownership Latch Primitives",
+                "Ownership Transfer",
+                "Ownership Latch",
             ]
         ),
 
         .target(
-            name: "Ownership Primitives Standard Library Integration",
+            name: "Ownership Standard Library Integration",
             dependencies: [
                 "Ownership Primitive"
             ]
         ),
 
         .target(
-            name: "Ownership Primitives",
+            name: "Ownership",
             dependencies: [
                 "Ownership Primitive",
-                "Ownership Borrow Primitives",
-                "Ownership Inout Primitives",
-                "Ownership Unique Primitives",
-                "Ownership Immutable Primitives",
-                "Ownership Mutable Primitives",
-                "Ownership Slot Primitives",
-                "Ownership Latch Primitives",
-                "Ownership Box Primitives",
-                "Ownership Transfer Primitives",
-                "Ownership Transfer Erased Primitives",
-                "Ownership Primitives Standard Library Integration",
+                "Ownership Borrow",
+                "Ownership Inout",
+                "Ownership Unique",
+                "Ownership Immutable",
+                "Ownership Mutable",
+                "Ownership Slot",
+                "Ownership Latch",
+                "Ownership Box",
+                "Ownership Transfer",
+                "Ownership Transfer Erased",
+                "Ownership Standard Library Integration",
             ]
         ),
 
         .target(
-            name: "Ownership Primitives Test Support",
+            name: "Ownership Test Support",
             dependencies: [
-                "Ownership Primitives",
+                "Ownership",
                 .product(
-                    name: "Tagged Primitives Test Support",
-                    package: "swift-tagged-primitives"
+                    name: "Tagged Test Support",
+                    package: "swift-tagged"
                 ),
             ],
             path: "Tests/Support"
         ),
 
         .testTarget(
-            name: "Ownership Primitives Tests",
+            name: "Ownership Tests",
             dependencies: [
-                "Ownership Primitives",
-                "Ownership Primitives Test Support",
+                "Ownership",
+                "Ownership Test Support",
             ]
         ),
     ],

@@ -1,4 +1,4 @@
-# Ownership Primitives
+# Ownership
 
 ![Development Status](https://img.shields.io/badge/status-active--development-blue.svg)
 
@@ -22,7 +22,7 @@ Safe ownership references and cells for `~Copyable` / `~Escapable` / `Copyable` 
 ### Heap-owned `~Copyable` cell
 
 ```swift
-import Ownership_Primitives
+import Ownership
 
 var request = Ownership.Unique(Request.get("/status"))   // Request is ~Copyable
 request.value.timeout = .seconds(30)                      // _modify coroutine
@@ -44,7 +44,7 @@ storage.deallocate()
 ### Scoped mutable reference with safe lifetime
 
 ```swift
-import Ownership_Primitives
+import Ownership
 
 struct Editor<Base: ~Copyable>: ~Copyable, ~Escapable {
     private let ref: Ownership.Inout<Base>
@@ -65,7 +65,7 @@ struct Editor<Base: ~Copyable>: ~Copyable, ~Escapable {
 ### Consuming an `Optional<~Copyable>`
 
 ```swift
-import Ownership_Primitives
+import Ownership
 
 var slot: Handle? = acquire()                 // Handle is ~Copyable
 guard let handle = slot.take() else { return }
@@ -80,7 +80,7 @@ guard let handle = slot.take() else { return }
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-primitives/swift-ownership-primitives.git", branch: "main")
+    .package(url: "https://github.com/swift-molecules/swift-ownership.git", branch: "main")
 ]
 ```
 
@@ -91,27 +91,27 @@ The package uses a **primary decomposition** — consumers depend on the specifi
     name: "App",
     dependencies: [
         // Scoped references
-        .product(name: "Ownership Borrow Primitives", package: "swift-ownership-primitives"),
-        .product(name: "Ownership Inout Primitives", package: "swift-ownership-primitives"),
+        .product(name: "Ownership Borrow", package: "swift-ownership"),
+        .product(name: "Ownership Inout", package: "swift-ownership"),
         // Heap-owned cells
-        .product(name: "Ownership Unique Primitives", package: "swift-ownership-primitives"),
-        .product(name: "Ownership Shared Primitives", package: "swift-ownership-primitives"),
-        .product(name: "Ownership Mutable Primitives", package: "swift-ownership-primitives"),
+        .product(name: "Ownership Unique", package: "swift-ownership"),
+        .product(name: "Ownership Shared Primitives", package: "swift-ownership"),
+        .product(name: "Ownership Mutable", package: "swift-ownership"),
         // Reusable atomic slot + one-shot latch
-        .product(name: "Ownership Slot Primitives", package: "swift-ownership-primitives"),
-        .product(name: "Ownership Latch Primitives", package: "swift-ownership-primitives"),
+        .product(name: "Ownership Slot", package: "swift-ownership"),
+        .product(name: "Ownership Latch", package: "swift-ownership"),
         // Heap CoW value cell
-        .product(name: "Ownership Box Primitives", package: "swift-ownership-primitives"),
+        .product(name: "Ownership Box", package: "swift-ownership"),
         // Cross-boundary transfer family (kind x direction matrix)
-        .product(name: "Ownership Transfer Primitives", package: "swift-ownership-primitives"),
-        .product(name: "Ownership Transfer Erased Primitives", package: "swift-ownership-primitives"),
+        .product(name: "Ownership Transfer", package: "swift-ownership"),
+        .product(name: "Ownership Transfer Erased", package: "swift-ownership"),
         // Optional<~Copyable>.take()
-        .product(name: "Ownership Primitives Standard Library Integration", package: "swift-ownership-primitives"),
+        .product(name: "Ownership Standard Library Integration", package: "swift-ownership"),
     ]
 )
 ```
 
-The umbrella product `Ownership Primitives` is available for prototyping and tests — it re-exports every variant via `@_exported public import`. Release builds SHOULD depend on the narrow variants to minimize the consumer's compile-time surface.
+The umbrella product `Ownership` is available for prototyping and tests — it re-exports every variant via `@_exported public import`. Release builds SHOULD depend on the narrow variants to minimize the consumer's compile-time surface.
 
 Requires Swift 6.3.1 and macOS 26 / iOS 26 / tvOS 26 / watchOS 26 / visionOS 26 (or the matching Linux / Windows toolchain).
 
@@ -153,7 +153,7 @@ Requires Swift 6.3.1 and macOS 26 / iOS 26 / tvOS 26 / watchOS 26 / visionOS 26 
 
 ## Stability
 
-`swift-ownership-primitives` follows SemVer pre-release semantics in 0.x.
+`swift-ownership` follows SemVer pre-release semantics in 0.x.
 
 | Surface | 0.1.x expectation |
 |---|---|
@@ -169,8 +169,8 @@ Notes on possible interaction with SE-0519 are tracked in [`Research/stdlib-inte
 
 **Used By**:
 
-- [swift-property-primitives](https://github.com/swift-primitives/swift-property-primitives) — stores `Tagged<Tag, Ownership.Inout<Base>>` / `Tagged<Tag, Ownership.Borrow<Base>>` as the canonical `Property.View` / `Property.View.Read` storage shape.
-- [swift-buffer-primitives](https://github.com/swift-primitives/swift-buffer-primitives) — returns `Ownership.Borrow` / `Ownership.Inout` from ring, linear, and slab buffer accessors for typed, lifetime-bounded element references.
+- [swift-property](https://github.com/swift-molecules/swift-property) — stores `Tagged<Tag, Ownership.Inout<Base>>` / `Tagged<Tag, Ownership.Borrow<Base>>` as the canonical `Property.View` / `Property.View.Read` storage shape.
+- [swift-buffer](https://github.com/swift-molecules/swift-buffer) — returns `Ownership.Borrow` / `Ownership.Inout` from ring, linear, and slab buffer accessors for typed, lifetime-bounded element references.
 
 ---
 

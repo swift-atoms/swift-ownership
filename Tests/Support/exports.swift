@@ -1,2 +1,2 @@
-@_exported public import Ownership_Primitives
-@_exported public import Tagged_Primitives_Test_Support
+@_exported public import Ownership
+@_exported public import Tagged_Test_Support

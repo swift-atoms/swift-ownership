@@ -1,4 +1,4 @@
-internal import Ownership_Latch_Primitives
+internal import Ownership_Latch
 
 extension Ownership.Transfer.Value.Incoming where V: ~Copyable {
 

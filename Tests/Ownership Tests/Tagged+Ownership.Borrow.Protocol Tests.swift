@@ -1,5 +1,5 @@
-import Ownership_Primitives
-import Tagged_Primitives
+import Ownership
+import Tagged
 import Testing
 
 @Suite
