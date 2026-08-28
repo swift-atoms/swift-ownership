@@ -13,7 +13,6 @@ Safe ownership references and cells for `~Copyable` / `~Escapable` / `Copyable` 
 - **Copy-on-write value cell** — `Ownership.Box<Value>` wraps a value in a refcounted heap cell with lazy CoW on mutation: `Copyable` when `Value` is, statically-unique (move-only) when `~Copyable`. The copy-on-write sibling of `Ownership.Unique` — SE-0517 reserves bare `Box` for exactly this variant. Deferred physical copy until divergent mutation.
 - **One-shot and reusable atomic cells** — `Ownership.Slot` cycles empty ↔ full for resource pools and channels; `Ownership.Latch` is terminal after take, for single-publication hand-off.
 - **Cross-boundary transfer matrix** — `Transfer.Value<V>.{Outgoing, Incoming}`, `Transfer.Retained<T>.{Outgoing, Incoming}`, and `Transfer.Erased.{Outgoing, Incoming}` fill the two-axis matrix of direction × payload kind. Tokens are `Copyable` for closure capture; only one `take` / `store` / `consume` succeeds atomically.
-- **`Optional<~Copyable>.take()`** — Consumes the wrapped value in place and leaves `nil`; stdlib has no equivalent on `~Copyable` `Wrapped`.
 
 ---
 
@@ -22,7 +21,7 @@ Safe ownership references and cells for `~Copyable` / `~Escapable` / `Copyable` 
 ### Heap-owned `~Copyable` cell
 
 ```swift
-import Ownership
+import Ownership_Unique
 
 var request = Ownership.Unique(Request.get("/status"))   // Request is ~Copyable
 request.value.timeout = .seconds(30)                      // _modify coroutine
@@ -44,7 +43,7 @@ storage.deallocate()
 ### Scoped mutable reference with safe lifetime
 
 ```swift
-import Ownership
+import Ownership_Inout
 
 struct Editor<Base: ~Copyable>: ~Copyable, ~Escapable {
     private let ref: Ownership.Inout<Base>
@@ -62,29 +61,15 @@ struct Editor<Base: ~Copyable>: ~Copyable, ~Escapable {
 
 `Ownership.Inout` is storable as a `~Copyable, ~Escapable` field: you cannot store `inout Base` directly (inout can't be stored), and `UnsafeMutablePointer<Base>` carries no lifetime. `Ownership.Inout` is `@safe`, lifetime-bounded to `&base` at the init site, and preserves CoW on `base.value` mutations.
 
-### Consuming an `Optional<~Copyable>`
-
-```swift
-import Ownership
-
-var slot: Handle? = acquire()                 // Handle is ~Copyable
-guard let handle = slot.take() else { return }
-// slot == nil; `handle` is consumed
-```
-
-`take()` is a mutating extension on `Optional where Wrapped: ~Copyable`. It `consume self`, reassigns `nil` to the storage, and returns the wrapped value — the stdlib does not provide this shape.
-
----
-
 ## Installation
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-molecules/swift-ownership.git", branch: "main")
+    .package(url: "https://github.com/swift-atoms/swift-ownership.git", branch: "main")
 ]
 ```
 
-The package uses a **primary decomposition** — consumers depend on the specific variant they use, not the umbrella. Pick the narrow product(s):
+The package uses a **primary decomposition** — consumers depend on the specific variant they use. Pick the narrow product(s):
 
 ```swift
 .target(
@@ -95,7 +80,7 @@ The package uses a **primary decomposition** — consumers depend on the specifi
         .product(name: "Ownership Inout", package: "swift-ownership"),
         // Heap-owned cells
         .product(name: "Ownership Unique", package: "swift-ownership"),
-        .product(name: "Ownership Shared", package: "swift-ownership"),
+        .product(name: "Ownership Immutable", package: "swift-ownership"),
         .product(name: "Ownership Mutable", package: "swift-ownership"),
         // Reusable atomic slot + one-shot latch
         .product(name: "Ownership Slot", package: "swift-ownership"),
@@ -105,13 +90,11 @@ The package uses a **primary decomposition** — consumers depend on the specifi
         // Cross-boundary transfer family (kind x direction matrix)
         .product(name: "Ownership Transfer", package: "swift-ownership"),
         .product(name: "Ownership Transfer Erased", package: "swift-ownership"),
-        // Optional<~Copyable>.take()
-        .product(name: "Ownership Standard Library Integration", package: "swift-ownership"),
     ]
 )
 ```
 
-The umbrella product `Ownership` is available for prototyping and tests — it re-exports every variant via `@_exported public import`. Release builds SHOULD depend on the narrow variants to minimize the consumer's compile-time surface.
+The base `Ownership` product provides the package namespace. Each layered product re-exports that base and adds one focused ownership implementation.
 
 Requires Swift 6.3.1 and macOS 26 / iOS 26 / tvOS 26 / watchOS 26 / visionOS 26 (or the matching Linux / Windows toolchain).
 
@@ -124,7 +107,7 @@ Requires Swift 6.3.1 and macOS 26 / iOS 26 / tvOS 26 / watchOS 26 / visionOS 26 
 | `Ownership.Borrow<Value>` | Scoped read-only reference (`Copyable, ~Escapable`) |
 | `Ownership.Inout<Value>` | Scoped mutable reference (`~Copyable, ~Escapable`) |
 | `Ownership.Unique<Value>` | Heap-owned exclusive cell — SE-0517 `UniqueBox` parity (`consume()`, `clone()`, `value { _read _modify }`, `span` / `mutableSpan`) |
-| `Ownership.Shared<Value>` | ARC-shared immutable cell |
+| `Ownership.Immutable<Value>` | ARC-shared immutable cell |
 | `Ownership.Mutable<Value>` | ARC-shared mutable cell (single-isolation) |
 | `Ownership.Mutable.Unchecked<Value>` | `@unchecked Sendable` opt-in variant of `Mutable` |
 | `Ownership.Slot<Value>` | Reusable atomic heap slot — cycles empty ↔ full |
@@ -133,7 +116,6 @@ Requires Swift 6.3.1 and macOS 26 / iOS 26 / tvOS 26 / watchOS 26 / visionOS 26 
 | `Ownership.Transfer.Value<V>.Outgoing` / `.Incoming` | One-shot generic transfer across `@Sendable` (direction × kind matrix) |
 | `Ownership.Transfer.Retained<T>.Outgoing` / `.Incoming` | Zero-alloc-outgoing / single-latch-incoming `AnyObject` transfer |
 | `Ownership.Transfer.Erased.Outgoing` / `.Incoming` | Type-erased boxed transfer |
-| `Optional<Wrapped>.take()` | Consume and reset on `~Copyable` `Wrapped` (mutating extension) |
 
 `Ownership.Borrow.`Protocol`` is the canonical borrow-capability protocol; conform via `extension MyType: Ownership.Borrow.`Protocol` {}` to participate without a bespoke accessor.
 
@@ -169,8 +151,8 @@ Notes on possible interaction with SE-0519 are tracked in [`Research/stdlib-inte
 
 **Used By**:
 
-- [swift-property](https://github.com/swift-molecules/swift-property) — stores `Tagged<Tag, Ownership.Inout<Base>>` / `Tagged<Tag, Ownership.Borrow<Base>>` as the canonical `Property.View` / `Property.View.Read` storage shape.
-- [swift-buffer](https://github.com/swift-molecules/swift-buffer) — returns `Ownership.Borrow` / `Ownership.Inout` from ring, linear, and slab buffer accessors for typed, lifetime-bounded element references.
+- [swift-property](https://github.com/swift-atoms/swift-property) — stores `Tagged<Tag, Ownership.Inout<Base>>` / `Tagged<Tag, Ownership.Borrow<Base>>` as the canonical `Property.View` / `Property.View.Read` storage shape.
+- [swift-buffer](https://github.com/swift-atoms/swift-buffer) — returns `Ownership.Borrow` / `Ownership.Inout` from ring, linear, and slab buffer accessors for typed, lifetime-bounded element references.
 
 ---
 
