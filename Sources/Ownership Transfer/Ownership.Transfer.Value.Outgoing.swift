@@ -1,3 +1,4 @@
+internal import Ownership_Latch
 
 extension Ownership.Transfer.Value where V: ~Copyable {
 
