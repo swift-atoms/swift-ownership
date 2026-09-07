@@ -1,4 +1,3 @@
-
 extension Ownership.Transfer.Retained.Incoming {
 
     public struct Token: Sendable {

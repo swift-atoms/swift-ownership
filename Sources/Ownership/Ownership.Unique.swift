@@ -21,8 +21,6 @@ extension Ownership {
     }
 }
 
-extension Ownership.Unique: @unchecked Sendable where Value: ~Copyable & Sendable {}
-
 extension Ownership.Unique where Value: ~Copyable {
 
     @inlinable

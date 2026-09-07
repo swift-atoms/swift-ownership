@@ -1,4 +1,3 @@
-
 extension Ownership.Transfer.Retained {
 
     @safe

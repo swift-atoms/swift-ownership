@@ -1,4 +1,3 @@
-
 extension Ownership.Transfer.Erased.Incoming {
 
     @safe

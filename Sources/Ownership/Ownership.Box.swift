@@ -22,8 +22,6 @@ extension Ownership {
     }
 }
 
-extension Ownership.Box: @unchecked Sendable where Value: Sendable & ~Copyable {}
-
 extension Ownership.Box where Value: Copyable {
 
     @inlinable

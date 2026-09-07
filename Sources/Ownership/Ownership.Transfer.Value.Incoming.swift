@@ -1,4 +1,3 @@
-
 extension Ownership.Transfer.Value where V: ~Copyable {
 
     public struct Incoming: ~Copyable {

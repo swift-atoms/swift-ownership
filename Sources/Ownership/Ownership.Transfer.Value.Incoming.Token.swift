@@ -1,4 +1,3 @@
-
 extension Ownership.Transfer.Value.Incoming where V: ~Copyable {
 
     public struct Token: Sendable {

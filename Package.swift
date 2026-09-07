@@ -13,8 +13,8 @@ let package = Package(
     ],
     products: [
         .library(name: "Ownership", targets: ["Ownership"]),
-        .library(name: "Ownership Standard Library Integration", targets: ["Ownership Standard Library Integration"]),
-        .library(name: "Ownership Foundation Library Integration", targets: ["Ownership Foundation Library Integration"]),
+
+        .library(name: "Ownership Foundation Integration", targets: ["Ownership Foundation Integration"]),
         .library(name: "Ownership Test Support", targets: ["Ownership Test Support"]),
     ],
     dependencies: [
@@ -31,20 +31,13 @@ let package = Package(
             ],
             path: "Sources/Ownership"
         ),
+        
         .target(
-            name: "Ownership Standard Library Integration",
+            name: "Ownership Foundation Integration",
             dependencies: [
                 .target(name: "Ownership"),
             ],
-            path: "Sources/Ownership Standard Library Integration"
-        ),
-        .target(
-            name: "Ownership Foundation Library Integration",
-            dependencies: [
-                .target(name: "Ownership"),
-                .target(name: "Ownership Standard Library Integration"),
-            ],
-            path: "Sources/Ownership Foundation Library Integration"
+            path: "Sources/Ownership Foundation Integration"
         ),
         .target(
             name: "Ownership Test Support",
@@ -59,8 +52,7 @@ let package = Package(
                 .target(name: "Ownership"),
                 .product(name: "Tagged", package: "swift-tagged"),
                 .target(name: "Ownership Test Support"),
-                .target(name: "Ownership Standard Library Integration"),
-                .target(name: "Ownership Foundation Library Integration"),
+                .target(name: "Ownership Foundation Integration"),
             ],
             path: "Tests/Ownership Tests"
         ),
