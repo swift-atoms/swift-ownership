@@ -3,9 +3,9 @@ import Testing
 
 @Suite
 struct `Ownership Inout Drain Tests` {
-    @Suite struct Unit {}
+    @Suite struct `Unit behavior` {}
     @Suite struct `Edge Case` {}
-    @Suite struct Integration {}
+    @Suite struct `Integration behavior` {}
 }
 
 extension `Ownership Inout Drain Tests` {
@@ -140,7 +140,7 @@ extension `Ownership Inout Drain Tests`.Builder where E: ~Copyable {
     }
 }
 
-extension `Ownership Inout Drain Tests`.Unit {
+extension `Ownership Inout Drain Tests`.`Unit behavior` {
     typealias Ring = `Ownership Inout Drain Tests`.Ring
 
     @Test
@@ -188,7 +188,7 @@ extension `Ownership Inout Drain Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Inout Drain Tests`.Integration {
+extension `Ownership Inout Drain Tests`.`Integration behavior` {
     typealias Ring = `Ownership Inout Drain Tests`.Ring
 
     @Test

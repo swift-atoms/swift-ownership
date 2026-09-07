@@ -61,6 +61,7 @@ extension Ownership.Box where Value: ~Copyable {
         }
     }
 
+    @unsafe
     @inlinable
     public var unguarded: Value {
         unsafeAddress { unsafe UnsafePointer(storage._payload) }

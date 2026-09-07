@@ -11,7 +11,7 @@ extension Ownership {
         @usableFromInline
         var _storage: UnsafeMutablePointer<Value>?
 
-        public init(_ value: consuming Value) {
+        public init(_ value: consuming sending Value) {
             _state = Atomic(State.initializing)
             let p = UnsafeMutablePointer<Value>.allocate(capacity: 1)
             unsafe p.initialize(to: value)

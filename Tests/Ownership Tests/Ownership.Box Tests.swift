@@ -3,13 +3,13 @@ import Testing
 
 @Suite
 struct `Ownership Box Tests` {
-    @Suite struct Unit {}
+    @Suite struct `Unit behavior` {}
     @Suite struct `Edge Case` {}
-    @Suite struct Integration {}
+    @Suite struct `Integration behavior` {}
     @Suite struct `Noncopyable Payload` {}
 }
 
-extension `Ownership Box Tests`.Unit {
+extension `Ownership Box Tests`.`Unit behavior` {
     @Test
     func `init(_:) stores the value`() {
         let box = Ownership.Box<Int>(42)
@@ -96,7 +96,7 @@ extension `Ownership Box Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Box Tests`.Integration {
+extension `Ownership Box Tests`.`Integration behavior` {
     @Test
     func `struct Value round-trips through CoW`() {
         struct Pair: Equatable {
@@ -152,7 +152,7 @@ extension `Ownership Box Tests`.Integration {
         var a = Ownership.Box<[Int]>([1, 2])
         let copied = a.ensureUnique()
         #expect(!copied)
-        a.unguarded.append(3)
+        unsafe a.unguarded.append(3)
         #expect(a.value == [1, 2, 3])
     }
 }
@@ -206,5 +206,28 @@ extension `Ownership Box Tests`.`Noncopyable Payload` {
             #expect(recorder.destroyed == 0)
         }
         #expect(recorder.destroyed == 1)
+    }
+}
+
+@Suite
+struct `Box mutation across tasks` {
+    @Test
+    func `sendable copies detach before concurrent mutation`() async {
+        let original = Ownership.Box<[Int]>([0])
+        let results = await withTaskGroup(of: [Int].self) { group in
+            for value in 1...32 {
+                group.addTask {
+                    var local = original
+                    local.value.append(value)
+                    return local.value
+                }
+            }
+            var values: [[Int]] = []
+            for await value in group { values.append(value) }
+            return values
+        }
+        #expect(original.value == [0])
+        #expect(results.count == 32)
+        #expect(Set(results) == Set((1...32).map { [0, $0] }))
     }
 }

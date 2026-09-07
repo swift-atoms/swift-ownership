@@ -3,12 +3,12 @@ import Testing
 
 @Suite
 struct `Ownership Immutable Tests` {
-    @Suite struct Unit {}
+    @Suite struct `Unit behavior` {}
     @Suite struct `Edge Case` {}
-    @Suite struct Integration {}
+    @Suite struct `Integration behavior` {}
 }
 
-extension `Ownership Immutable Tests`.Unit {
+extension `Ownership Immutable Tests`.`Unit behavior` {
     @Test
     func `init(_:) stores the value`() {
         let immutable = Ownership.Immutable(42)
@@ -53,7 +53,7 @@ extension `Ownership Immutable Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Immutable Tests`.Integration {
+extension `Ownership Immutable Tests`.`Integration behavior` {
     @Test
     func `Sendable — can pass across an async boundary`() async {
         let immutable = Ownership.Immutable(99)

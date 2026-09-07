@@ -3,12 +3,12 @@ import Testing
 
 @Suite
 struct `Ownership Inout Tests` {
-    @Suite struct Unit {}
+    @Suite struct `Unit behavior` {}
     @Suite struct `Edge Case` {}
-    @Suite struct Integration {}
+    @Suite struct `Integration behavior` {}
 }
 
-extension `Ownership Inout Tests`.Unit {
+extension `Ownership Inout Tests`.`Unit behavior` {
     @Test
     func `init(mutating:) writes reach the source`() {
         var source = 0
@@ -116,7 +116,7 @@ extension `Ownership Inout Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Inout Tests`.Integration {
+extension `Ownership Inout Tests`.`Integration behavior` {
     @Test
     func `round-trip — source value survives a write-then-read`() {
         var source = 0
@@ -149,7 +149,7 @@ private struct NEResource: ~Escapable, ~Copyable {
     init(_ id: Int) { self.id = id }
 }
 
-extension `Ownership Inout Tests`.Unit {
+extension `Ownership Inout Tests`.`Unit behavior` {
 
     @Test
     func `Inout~Escapable type-level admission via init(unsafeRawAddress:mutating:)`() {

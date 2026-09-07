@@ -3,12 +3,12 @@ import Testing
 
 @Suite
 struct `Ownership Borrow Tests` {
-    @Suite struct Unit {}
+    @Suite struct `Unit behavior` {}
     @Suite struct `Edge Case` {}
-    @Suite struct Integration {}
+    @Suite struct `Integration behavior` {}
 }
 
-extension `Ownership Borrow Tests`.Unit {
+extension `Ownership Borrow Tests`.`Unit behavior` {
     @Test
     func `init(borrowing:) yields the borrowed value`() {
         let source = 42
@@ -85,7 +85,7 @@ extension `Ownership Borrow Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Borrow Tests`.Integration {
+extension `Ownership Borrow Tests`.`Integration behavior` {
     @Test
     func `Optional<Ownership.Borrow<Value>> expresses peek-style API`() {
         let value = 33

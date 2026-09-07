@@ -4,13 +4,13 @@ import Ownership
 
 @Suite
 struct `Ownership Unique Tests` {
-    @Suite struct Unit {}
+    @Suite struct `Unit behavior` {}
     @Suite struct `Edge Case` {}
-    @Suite struct Integration {}
-    @Suite(.serialized) struct Performance {}
+    @Suite struct `Integration behavior` {}
+    @Suite(.serialized) struct `Performance behavior` {}
 }
 
-extension `Ownership Unique Tests`.Unit {
+extension `Ownership Unique Tests`.`Unit behavior` {
     @Test
     func `init heap-allocates value`() {
         let unique = Ownership.Unique<Int>(42)
@@ -136,7 +136,7 @@ extension `Ownership Unique Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Unique Tests`.Integration {
+extension `Ownership Unique Tests`.`Integration behavior` {
     @Test
     func `deinit deallocates memory`() {
 
@@ -168,7 +168,7 @@ extension `Ownership Unique Tests`.Integration {
     }
 }
 
-extension `Ownership Unique Tests`.Performance {
+extension `Ownership Unique Tests`.`Performance behavior` {
     @Test
     func `allocation and deallocation`() {
 

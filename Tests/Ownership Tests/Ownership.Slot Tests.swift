@@ -3,13 +3,13 @@ import Testing
 
 @Suite
 struct `Ownership Slot Tests` {
-    @Suite struct Unit {}
+    @Suite struct `Unit behavior` {}
     @Suite struct `Edge Case` {}
-    @Suite struct Integration {}
-    @Suite struct Concurrency {}
+    @Suite struct `Integration behavior` {}
+    @Suite struct `Concurrent behavior` {}
 }
 
-extension `Ownership Slot Tests`.Unit {
+extension `Ownership Slot Tests`.`Unit behavior` {
     @Test
     func `init() creates an empty slot`() {
         let slot = Ownership.Slot<Int>()
@@ -79,7 +79,7 @@ extension `Ownership Slot Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Slot Tests`.Integration {
+extension `Ownership Slot Tests`.`Integration behavior` {
     @Test
     func `works with struct Value types`() {
         struct Pair: Equatable {
@@ -132,7 +132,7 @@ extension `Ownership Slot Tests`.Integration {
     }
 }
 
-extension `Ownership Slot Tests`.Concurrency {
+extension `Ownership Slot Tests`.`Concurrent behavior` {
     @Test
     func `concurrent single-producer single-consumer store take never loses or duplicates a value`()
         async

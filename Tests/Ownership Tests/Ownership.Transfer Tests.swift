@@ -8,7 +8,7 @@ struct `Ownership Transfer Tests` {
     @Suite struct `Value Incoming` {}
     @Suite struct `Retained Outgoing` {}
     @Suite struct `Retained Incoming` {}
-    @Suite struct Integration {}
+    @Suite struct `Integration behavior` {}
 }
 
 extension `Ownership Transfer Tests`.`Value Outgoing` {
@@ -142,7 +142,7 @@ extension `Ownership Transfer Tests`.`Retained Incoming` {
     }
 }
 
-extension `Ownership Transfer Tests`.Integration {
+extension `Ownership Transfer Tests`.`Integration behavior` {
     @Test
     func `Outgoing + Incoming together model a bidirectional channel`() {
         let request = Ownership.Transfer.Value<Int>.Outgoing(42)

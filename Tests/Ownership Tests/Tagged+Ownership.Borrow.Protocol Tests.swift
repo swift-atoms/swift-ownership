@@ -4,14 +4,14 @@ import Testing
 
 @Suite
 struct `Tagged+Ownership.Borrow.Protocol Tests` {
-    @Suite struct Unit {}
+    @Suite struct `Unit behavior` {}
     @Suite struct `Edge Case` {}
-    @Suite struct Integration {}
+    @Suite struct `Integration behavior` {}
 }
 
 private enum Phantom {}
 
-extension `Tagged+Ownership.Borrow.Protocol Tests`.Unit {
+extension `Tagged+Ownership.Borrow.Protocol Tests`.`Unit behavior` {
     @Test
     func `Tagged conforms to Ownership Borrow Protocol when Underlying does`() {
 

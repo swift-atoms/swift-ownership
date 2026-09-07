@@ -3,12 +3,12 @@ import Testing
 
 @Suite
 struct `Ownership Mutable Tests` {
-    @Suite struct Unit {}
+    @Suite struct `Unit behavior` {}
     @Suite struct `Edge Case` {}
-    @Suite struct Integration {}
+    @Suite struct `Integration behavior` {}
 }
 
-extension `Ownership Mutable Tests`.Unit {
+extension `Ownership Mutable Tests`.`Unit behavior` {
     @Test
     func `init(_:) stores the value`() {
         let mutable = Ownership.Mutable(42)
@@ -64,7 +64,7 @@ extension `Ownership Mutable Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Mutable Tests`.Integration {
+extension `Ownership Mutable Tests`.`Integration behavior` {
     @Test
     func `Unchecked opt-in wraps a Mutable and passes across Sendable`() async {
         let unchecked = Ownership.Mutable<Int>.Unchecked(0)
