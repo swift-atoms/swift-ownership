@@ -13,6 +13,8 @@ let package = Package(
     ],
     products: [
         .library(name: "Ownership", targets: ["Ownership"]),
+        .library(name: "Ownership Standard Library Integration", targets: ["Ownership Standard Library Integration"]),
+        .library(name: "Ownership Foundation Library Integration", targets: ["Ownership Foundation Library Integration"]),
         .library(name: "Ownership Test Support", targets: ["Ownership Test Support"]),
     ],
     dependencies: [
@@ -26,74 +28,23 @@ let package = Package(
             name: "Ownership",
             dependencies: [
                 .product(name: "Tagged", package: "swift-tagged"),
-            ]
+            ],
+            path: "Sources/Ownership"
         ),
-        .testTarget(
-            name: "Ownership Tests",
+        .target(
+            name: "Ownership Standard Library Integration",
             dependencies: [
                 .target(name: "Ownership"),
-            ]
+            ],
+            path: "Sources/Ownership Standard Library Integration"
         ),
-        .testTarget(
-            name: "Ownership Borrow Tests",
+        .target(
+            name: "Ownership Foundation Library Integration",
             dependencies: [
                 .target(name: "Ownership"),
-                .product(name: "Tagged", package: "swift-tagged"),
-            ]
-        ),
-        .testTarget(
-            name: "Ownership Inout Tests",
-            dependencies: [
-                .target(name: "Ownership"),
-            ]
-        ),
-        .testTarget(
-            name: "Ownership Unique Tests",
-            dependencies: [
-                .target(name: "Ownership"),
-            ]
-        ),
-        .testTarget(
-            name: "Ownership Immutable Tests",
-            dependencies: [
-                .target(name: "Ownership"),
-            ]
-        ),
-        .testTarget(
-            name: "Ownership Mutable Tests",
-            dependencies: [
-                .target(name: "Ownership"),
-            ]
-        ),
-        .testTarget(
-            name: "Ownership Slot Tests",
-            dependencies: [
-                .target(name: "Ownership"),
-            ]
-        ),
-        .testTarget(
-            name: "Ownership Latch Tests",
-            dependencies: [
-                .target(name: "Ownership"),
-            ]
-        ),
-        .testTarget(
-            name: "Ownership Box Tests",
-            dependencies: [
-                .target(name: "Ownership"),
-            ]
-        ),
-        .testTarget(
-            name: "Ownership Transfer Tests",
-            dependencies: [
-                .target(name: "Ownership"),
-            ]
-        ),
-        .testTarget(
-            name: "Ownership Transfer Erased Tests",
-            dependencies: [
-                .target(name: "Ownership"),
-            ]
+                .target(name: "Ownership Standard Library Integration"),
+            ],
+            path: "Sources/Ownership Foundation Library Integration"
         ),
         .target(
             name: "Ownership Test Support",
@@ -102,12 +53,23 @@ let package = Package(
             ],
             path: "Tests/Support"
         ),
+        .testTarget(
+            name: "Ownership Tests",
+            dependencies: [
+                .target(name: "Ownership"),
+                .product(name: "Tagged", package: "swift-tagged"),
+                .target(name: "Ownership Test Support"),
+                .target(name: "Ownership Standard Library Integration"),
+                .target(name: "Ownership Foundation Library Integration"),
+            ],
+            path: "Tests/Ownership Tests"
+        ),
     ],
     swiftLanguageModes: [.v6]
 )
 
-for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
-    let ecosystem: [SwiftSetting] = [
+for target in package.targets {
+    target.swiftSettings = [
         .strictMemorySafety(),
         .enableUpcomingFeature("ExistentialAny"),
         .enableUpcomingFeature("InternalImportsByDefault"),
@@ -116,8 +78,4 @@ for target in package.targets where ![.system, .binary, .plugin, .macro].contain
         .enableExperimentalFeature("Lifetimes"),
         .enableUpcomingFeature("InferIsolatedConformances"),
     ]
-
-    let package: [SwiftSetting] = []
-
-    target.swiftSettings = (target.swiftSettings ?? []) + ecosystem + package
 }
