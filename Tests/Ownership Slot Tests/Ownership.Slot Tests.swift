@@ -1,4 +1,4 @@
-import Ownership_Slot
+import Ownership
 import Testing
 
 @Suite

@@ -1,4 +1,3 @@
-internal import Ownership_Latch
 
 extension Ownership.Transfer.Erased {
 

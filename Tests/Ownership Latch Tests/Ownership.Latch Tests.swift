@@ -1,4 +1,4 @@
-import Ownership_Latch
+import Ownership
 import Testing
 
 @Suite

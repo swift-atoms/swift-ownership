@@ -1,4 +1,4 @@
-import Ownership_Transfer_Erased
+import Ownership
 import Testing
 
 @Suite

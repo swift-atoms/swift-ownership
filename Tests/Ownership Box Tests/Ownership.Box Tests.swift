@@ -1,4 +1,4 @@
-import Ownership_Box
+import Ownership
 import Testing
 
 @Suite

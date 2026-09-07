@@ -12,53 +12,8 @@ let package = Package(
         .visionOS(.v27),
     ],
     products: [
-
-        .library(
-            name: "Ownership",
-            targets: ["Ownership"]
-        ),
-
-        .library(
-            name: "Ownership Borrow",
-            targets: ["Ownership Borrow"]
-        ),
-        .library(
-            name: "Ownership Inout",
-            targets: ["Ownership Inout"]
-        ),
-        .library(
-            name: "Ownership Unique",
-            targets: ["Ownership Unique"]
-        ),
-        .library(
-            name: "Ownership Immutable",
-            targets: ["Ownership Immutable"]
-        ),
-        .library(
-            name: "Ownership Mutable",
-            targets: ["Ownership Mutable"]
-        ),
-        .library(
-            name: "Ownership Slot",
-            targets: ["Ownership Slot"]
-        ),
-        .library(
-            name: "Ownership Latch",
-            targets: ["Ownership Latch"]
-        ),
-        .library(
-            name: "Ownership Box",
-            targets: ["Ownership Box"]
-        ),
-        .library(
-            name: "Ownership Transfer",
-            targets: ["Ownership Transfer"]
-        ),
-        .library(
-            name: "Ownership Transfer Erased",
-            targets: ["Ownership Transfer Erased"]
-        ),
-
+        .library(name: "Ownership", targets: ["Ownership"]),
+        .library(name: "Ownership Test Support", targets: ["Ownership Test Support"]),
     ],
     dependencies: [
         .package(
@@ -67,73 +22,10 @@ let package = Package(
         )
     ],
     targets: [
-
         .target(
             name: "Ownership",
-            dependencies: []
-        ),
-
-        .target(
-            name: "Ownership Borrow",
             dependencies: [
-                .target(name: "Ownership"),
                 .product(name: "Tagged", package: "swift-tagged"),
-            ]
-        ),
-        .target(
-            name: "Ownership Inout",
-            dependencies: [
-                .target(name: "Ownership")
-            ]
-        ),
-        .target(
-            name: "Ownership Unique",
-            dependencies: [
-                .target(name: "Ownership")
-            ]
-        ),
-        .target(
-            name: "Ownership Immutable",
-            dependencies: [
-                .target(name: "Ownership")
-            ]
-        ),
-        .target(
-            name: "Ownership Mutable",
-            dependencies: [
-                .target(name: "Ownership")
-            ]
-        ),
-        .target(
-            name: "Ownership Slot",
-            dependencies: [
-                .target(name: "Ownership")
-            ]
-        ),
-        .target(
-            name: "Ownership Latch",
-            dependencies: [
-                .target(name: "Ownership")
-            ]
-        ),
-        .target(
-            name: "Ownership Box",
-            dependencies: [
-                .target(name: "Ownership")
-            ]
-        ),
-        .target(
-            name: "Ownership Transfer",
-            dependencies: [
-                .target(name: "Ownership"),
-                .target(name: "Ownership Latch"),
-            ]
-        ),
-        .target(
-            name: "Ownership Transfer Erased",
-            dependencies: [
-                .target(name: "Ownership Transfer"),
-                .target(name: "Ownership Latch"),
             ]
         ),
         .testTarget(
@@ -145,63 +37,70 @@ let package = Package(
         .testTarget(
             name: "Ownership Borrow Tests",
             dependencies: [
-                .target(name: "Ownership Borrow"),
+                .target(name: "Ownership"),
                 .product(name: "Tagged", package: "swift-tagged"),
             ]
         ),
         .testTarget(
             name: "Ownership Inout Tests",
             dependencies: [
-                .target(name: "Ownership Inout"),
+                .target(name: "Ownership"),
             ]
         ),
         .testTarget(
             name: "Ownership Unique Tests",
             dependencies: [
-                .target(name: "Ownership Unique"),
+                .target(name: "Ownership"),
             ]
         ),
         .testTarget(
             name: "Ownership Immutable Tests",
             dependencies: [
-                .target(name: "Ownership Immutable"),
+                .target(name: "Ownership"),
             ]
         ),
         .testTarget(
             name: "Ownership Mutable Tests",
             dependencies: [
-                .target(name: "Ownership Mutable"),
+                .target(name: "Ownership"),
             ]
         ),
         .testTarget(
             name: "Ownership Slot Tests",
             dependencies: [
-                .target(name: "Ownership Slot"),
+                .target(name: "Ownership"),
             ]
         ),
         .testTarget(
             name: "Ownership Latch Tests",
             dependencies: [
-                .target(name: "Ownership Latch"),
+                .target(name: "Ownership"),
             ]
         ),
         .testTarget(
             name: "Ownership Box Tests",
             dependencies: [
-                .target(name: "Ownership Box"),
+                .target(name: "Ownership"),
             ]
         ),
         .testTarget(
             name: "Ownership Transfer Tests",
             dependencies: [
-                .target(name: "Ownership Transfer"),
+                .target(name: "Ownership"),
             ]
         ),
         .testTarget(
             name: "Ownership Transfer Erased Tests",
             dependencies: [
-                .target(name: "Ownership Transfer Erased"),
+                .target(name: "Ownership"),
             ]
+        ),
+        .target(
+            name: "Ownership Test Support",
+            dependencies: [
+                .target(name: "Ownership"),
+            ],
+            path: "Tests/Support"
         ),
     ],
     swiftLanguageModes: [.v6]

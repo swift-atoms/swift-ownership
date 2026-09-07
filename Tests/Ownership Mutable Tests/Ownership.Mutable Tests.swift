@@ -1,4 +1,4 @@
-import Ownership_Mutable
+import Ownership
 import Testing
 
 @Suite
