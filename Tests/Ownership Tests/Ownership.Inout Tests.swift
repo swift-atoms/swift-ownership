@@ -2,13 +2,13 @@ import Ownership
 import Testing
 
 @Suite
-struct `Ownership Inout Tests` {
-    @Suite struct `Unit behavior` {}
-    @Suite struct `Edge Case` {}
-    @Suite struct `Integration behavior` {}
+struct `Inout wrappers preserve source mutations and payload capabilities` {
+    @Suite struct `Inout construction admits supported payloads and writes through to source storage` {}
+    @Suite struct `Inout accessors preserve nested mutations across copyable and noncopyable payloads` {}
+    @Suite struct `Repeated inout writes preserve readable source state` {}
 }
 
-extension `Ownership Inout Tests`.`Unit behavior` {
+extension `Inout wrappers preserve source mutations and payload capabilities`.`Inout construction admits supported payloads and writes through to source storage` {
     @Test
     func `init(mutating:) writes reach the source`() {
         var source = 0
@@ -53,7 +53,7 @@ extension `Ownership Inout Tests`.`Unit behavior` {
     }
 }
 
-extension `Ownership Inout Tests`.`Edge Case` {
+extension `Inout wrappers preserve source mutations and payload capabilities`.`Inout accessors preserve nested mutations across copyable and noncopyable payloads` {
     @Test
     func `V12 — Copyable Value uses get + _modify (pure read works)`() {
         struct Counter { var count: Int }
@@ -116,7 +116,7 @@ extension `Ownership Inout Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Inout Tests`.`Integration behavior` {
+extension `Inout wrappers preserve source mutations and payload capabilities`.`Repeated inout writes preserve readable source state` {
     @Test
     func `round-trip — source value survives a write-then-read`() {
         var source = 0
@@ -149,10 +149,10 @@ private struct NEResource: ~Escapable, ~Copyable {
     init(_ id: Int) { self.id = id }
 }
 
-extension `Ownership Inout Tests`.`Unit behavior` {
+extension `Inout wrappers preserve source mutations and payload capabilities`.`Inout construction admits supported payloads and writes through to source storage` {
 
     @Test
-    func `Inout~Escapable type-level admission via init(unsafeRawAddress:mutating:)`() {
+    func `Inout construction type checks for a nonescapable resource`() {
 
         let _ = { (storage: UnsafeMutableRawPointer, owner: inout Int) in
             unsafe (_ = Ownership.Inout<NEResource>(
@@ -164,7 +164,7 @@ extension `Ownership Inout Tests`.`Unit behavior` {
     }
 
     @Test
-    func `Inout~Int Copyable Value regression guard`() {
+    func `An inout wrapper writes back a copyable integer value`() {
         var source = 0
         func write(_ value: inout Int) {
             let ref = Ownership.Inout(mutating: &value)
@@ -175,7 +175,7 @@ extension `Ownership Inout Tests`.`Unit behavior` {
     }
 
     @Test
-    func `Inout~Copyable Escapable Value regression guard`() {
+    func `An inout wrapper writes back a noncopyable escapable payload`() {
         struct Payload: ~Copyable { var n: Int }
         var source = Payload(n: 0)
         func write(_ value: inout Payload) {

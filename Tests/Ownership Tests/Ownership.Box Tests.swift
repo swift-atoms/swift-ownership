@@ -2,14 +2,14 @@ import Ownership
 import Testing
 
 @Suite
-struct `Ownership Box Tests` {
-    @Suite struct `Unit behavior` {}
-    @Suite struct `Edge Case` {}
-    @Suite struct `Integration behavior` {}
-    @Suite struct `Noncopyable Payload` {}
+struct `Ownership boxes preserve value semantics through shared storage` {
+    @Suite struct `Ownership box construction mutation and cloning preserve stored values` {}
+    @Suite struct `Mutating shared ownership boxes separates their values and storage identities` {}
+    @Suite struct `Nested boxes and explicit cloning preserve independent value semantics` {}
+    @Suite struct `Ownership boxes share noncopyable payloads and destroy them exactly once` {}
 }
 
-extension `Ownership Box Tests`.`Unit behavior` {
+extension `Ownership boxes preserve value semantics through shared storage`.`Ownership box construction mutation and cloning preserve stored values` {
     @Test
     func `init(_:) stores the value`() {
         let box = Ownership.Box<Int>(42)
@@ -53,7 +53,7 @@ extension `Ownership Box Tests`.`Unit behavior` {
     }
 }
 
-extension `Ownership Box Tests`.`Edge Case` {
+extension `Ownership boxes preserve value semantics through shared storage`.`Mutating shared ownership boxes separates their values and storage identities` {
     @Test
     func `shared cell CoW — mutation on copy leaves original untouched`() {
         let a = Ownership.Box<[Int]>([1, 2, 3])
@@ -73,7 +73,7 @@ extension `Ownership Box Tests`.`Edge Case` {
     }
 
     @Test
-    func `mutating through the original after sharing then diverging`() {
+    func `Mutating either shared box leaves the other stored value unchanged`() {
         var a = Ownership.Box<Int>(0)
         var b = a
         a.value = 5
@@ -96,7 +96,7 @@ extension `Ownership Box Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Box Tests`.`Integration behavior` {
+extension `Ownership boxes preserve value semantics through shared storage`.`Nested boxes and explicit cloning preserve independent value semantics` {
     @Test
     func `struct Value round-trips through CoW`() {
         struct Pair: Equatable {
@@ -157,7 +157,7 @@ extension `Ownership Box Tests`.`Integration behavior` {
     }
 }
 
-extension `Ownership Box Tests`.`Noncopyable Payload` {
+extension `Ownership boxes preserve value semantics through shared storage`.`Ownership boxes share noncopyable payloads and destroy them exactly once` {
     final class Recorder {
         var destroyed = 0
     }
@@ -210,7 +210,7 @@ extension `Ownership Box Tests`.`Noncopyable Payload` {
 }
 
 @Suite
-struct `Box mutation across tasks` {
+struct `Sendable box copies detach before concurrent mutation` {
     @Test
     func `sendable copies detach before concurrent mutation`() async {
         let original = Ownership.Box<[Int]>([0])

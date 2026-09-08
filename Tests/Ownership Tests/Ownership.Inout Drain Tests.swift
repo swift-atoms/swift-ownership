@@ -2,13 +2,13 @@ import Ownership
 import Testing
 
 @Suite
-struct `Ownership Inout Drain Tests` {
-    @Suite struct `Unit behavior` {}
-    @Suite struct `Edge Case` {}
-    @Suite struct `Integration behavior` {}
+struct `Draining inout backed views reaches an empty state` {
+    @Suite struct `Repeated draining through an inout view terminates` {}
+    @Suite struct `Draining across a function boundary reaches exhaustion` {}
+    @Suite struct `Builder draining terminates for copyable and noncopyable elements` {}
 }
 
-extension `Ownership Inout Drain Tests` {
+extension `Draining inout backed views reaches an empty state` {
     struct Header {
         var head: Int = 0
         var count: Int = 0
@@ -60,8 +60,8 @@ extension `Ownership Inout Drain Tests` {
     enum Builder<E: ~Copyable> {}
 }
 
-extension `Ownership Inout Drain Tests`.Ring where E: ~Copyable {
-    typealias Fixture = `Ownership Inout Drain Tests`
+extension `Draining inout backed views reaches an empty state`.Ring where E: ~Copyable {
+    typealias Fixture = `Draining inout backed views reaches an empty state`
 
     var count: Int { header.count }
     var isEmpty: Bool { count == 0 }
@@ -102,20 +102,20 @@ extension `Ownership Inout Drain Tests`.Ring where E: ~Copyable {
     }
 }
 
-extension `Ownership Inout Drain Tests`.Pop where E: ~Copyable {
+extension `Draining inout backed views reaches an empty state`.Pop where E: ~Copyable {
     mutating func front() -> E? {
         base.value.popFront()
     }
 }
 
-extension `Ownership Inout Drain Tests`.Push where E: ~Copyable {
+extension `Draining inout backed views reaches an empty state`.Push where E: ~Copyable {
     mutating func back(_ element: consuming E) {
         base.value.pushBack(element)
     }
 }
 
-extension `Ownership Inout Drain Tests`.Builder where E: ~Copyable {
-    typealias Ring = `Ownership Inout Drain Tests`.Ring<E>
+extension `Draining inout backed views reaches an empty state`.Builder where E: ~Copyable {
+    typealias Ring = `Draining inout backed views reaches an empty state`.Ring<E>
 
     static func buildExpression(_ expression: consuming E) -> Ring {
         var result = Ring(capacity: 64)
@@ -140,8 +140,8 @@ extension `Ownership Inout Drain Tests`.Builder where E: ~Copyable {
     }
 }
 
-extension `Ownership Inout Drain Tests`.`Unit behavior` {
-    typealias Ring = `Ownership Inout Drain Tests`.Ring
+extension `Draining inout backed views reaches an empty state`.`Repeated draining through an inout view terminates` {
+    typealias Ring = `Draining inout backed views reaches an empty state`.Ring
 
     @Test
     func `while-not-empty drain through an Inout-backed view terminates`() {
@@ -162,8 +162,8 @@ extension `Ownership Inout Drain Tests`.`Unit behavior` {
     }
 }
 
-extension `Ownership Inout Drain Tests`.`Edge Case` {
-    typealias Ring = `Ownership Inout Drain Tests`.Ring
+extension `Draining inout backed views reaches an empty state`.`Draining across a function boundary reaches exhaustion` {
+    typealias Ring = `Draining inout backed views reaches an empty state`.Ring
 
     @Test
     func `drain across a non-inlined boundary terminates`() {
@@ -188,8 +188,8 @@ extension `Ownership Inout Drain Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Inout Drain Tests`.`Integration behavior` {
-    typealias Ring = `Ownership Inout Drain Tests`.Ring
+extension `Draining inout backed views reaches an empty state`.`Builder draining terminates for copyable and noncopyable elements` {
+    typealias Ring = `Draining inout backed views reaches an empty state`.Ring
 
     @Test
     func `builder drain terminates (Copyable element)`() {

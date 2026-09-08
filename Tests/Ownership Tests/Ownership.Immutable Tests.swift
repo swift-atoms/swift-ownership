@@ -2,13 +2,13 @@ import Ownership
 import Testing
 
 @Suite
-struct `Ownership Immutable Tests` {
-    @Suite struct `Unit behavior` {}
-    @Suite struct `Edge Case` {}
-    @Suite struct `Integration behavior` {}
+struct `Immutable ownership preserves shared values and identity` {
+    @Suite struct `Immutable owners retain their value across repeated reads and shared references` {}
+    @Suite struct `Immutable owners preserve struct and class payloads` {}
+    @Suite struct `Sendable immutable owners preserve their value across tasks` {}
 }
 
-extension `Ownership Immutable Tests`.`Unit behavior` {
+extension `Immutable ownership preserves shared values and identity`.`Immutable owners retain their value across repeated reads and shared references` {
     @Test
     func `init(_:) stores the value`() {
         let immutable = Ownership.Immutable(42)
@@ -31,9 +31,9 @@ extension `Ownership Immutable Tests`.`Unit behavior` {
     }
 }
 
-extension `Ownership Immutable Tests`.`Edge Case` {
+extension `Immutable ownership preserves shared values and identity`.`Immutable owners preserve struct and class payloads` {
     @Test
-    func `works with struct types`() {
+    func `An immutable owner preserves its stored struct value`() {
         struct Point: Equatable, Sendable {
             var x: Int
             var y: Int
@@ -43,7 +43,7 @@ extension `Ownership Immutable Tests`.`Edge Case` {
     }
 
     @Test
-    func `works with class types`() {
+    func `An immutable owner exposes its stored class payload`() {
         final class Node: Sendable {
             let id: Int
             init(_ id: Int) { self.id = id }
@@ -53,9 +53,9 @@ extension `Ownership Immutable Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Immutable Tests`.`Integration behavior` {
+extension `Immutable ownership preserves shared values and identity`.`Sendable immutable owners preserve their value across tasks` {
     @Test
-    func `Sendable — can pass across an async boundary`() async {
+    func `An immutable owner preserves its value in a detached task`() async {
         let immutable = Ownership.Immutable(99)
         let captured = await Task.detached { () -> Int in
             immutable.value

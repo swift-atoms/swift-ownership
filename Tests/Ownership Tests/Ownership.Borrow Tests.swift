@@ -2,13 +2,13 @@ import Ownership
 import Testing
 
 @Suite
-struct `Ownership Borrow Tests` {
-    @Suite struct `Unit behavior` {}
-    @Suite struct `Edge Case` {}
-    @Suite struct `Integration behavior` {}
+struct `Borrow wrappers preserve access to borrowed values` {
+    @Suite struct `Borrow construction and repeated access preserve the source value` {}
+    @Suite struct `Borrow wrappers preserve struct and class payloads within their lifetime` {}
+    @Suite struct `Optional and nested borrow wrappers preserve value access` {}
 }
 
-extension `Ownership Borrow Tests`.`Unit behavior` {
+extension `Borrow wrappers preserve access to borrowed values`.`Borrow construction and repeated access preserve the source value` {
     @Test
     func `init(borrowing:) yields the borrowed value`() {
         let source = 42
@@ -41,7 +41,7 @@ extension `Ownership Borrow Tests`.`Unit behavior` {
     }
 }
 
-extension `Ownership Borrow Tests`.`Edge Case` {
+extension `Borrow wrappers preserve access to borrowed values`.`Borrow wrappers preserve struct and class payloads within their lifetime` {
     @Test
     func `value accessor works with struct types`() {
         struct Point: Equatable {
@@ -85,7 +85,7 @@ extension `Ownership Borrow Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Borrow Tests`.`Integration behavior` {
+extension `Borrow wrappers preserve access to borrowed values`.`Optional and nested borrow wrappers preserve value access` {
     @Test
     func `Optional<Ownership.Borrow<Value>> expresses peek-style API`() {
         let value = 33

@@ -2,13 +2,13 @@ import Ownership
 import Testing
 
 @Suite
-struct `Ownership Mutable Tests` {
-    @Suite struct `Unit behavior` {}
-    @Suite struct `Edge Case` {}
-    @Suite struct `Integration behavior` {}
+struct `Mutable owners share direct access to their stored value` {
+    @Suite struct `Mutable owner aliases observe the same stored mutations` {}
+    @Suite struct `Mutable owners borrow and modify noncopyable payloads` {}
+    @Suite struct `Unchecked mutable wrappers permit explicit transfer across tasks` {}
 }
 
-extension `Ownership Mutable Tests`.`Unit behavior` {
+extension `Mutable owners share direct access to their stored value`.`Mutable owner aliases observe the same stored mutations` {
     @Test
     func `init(_:) stores the value`() {
         let mutable = Ownership.Mutable(42)
@@ -23,7 +23,7 @@ extension `Ownership Mutable Tests`.`Unit behavior` {
     }
 
     @Test
-    func `ARC sharing — mutations through one reference visible through another`() {
+    func `Mutable owner aliases observe each other through shared storage`() {
         let mutable = Ownership.Mutable(0)
         let alias = mutable
         alias.value = 50
@@ -46,9 +46,9 @@ extension `Ownership Mutable Tests`.`Unit behavior` {
     }
 }
 
-extension `Ownership Mutable Tests`.`Edge Case` {
+extension `Mutable owners share direct access to their stored value`.`Mutable owners borrow and modify noncopyable payloads` {
     @Test
-    func `works with ~Copyable Value — transitive borrow read`() {
+    func `A mutable owner borrows its noncopyable payload for reading`() {
         struct Handle: ~Copyable { let fd: Int32 }
         let mutable = Ownership.Mutable(Handle(fd: 3))
 
@@ -56,7 +56,7 @@ extension `Ownership Mutable Tests`.`Edge Case` {
     }
 
     @Test
-    func `works with ~Copyable Value — in-place mutation via _modify`() {
+    func `A mutable owner updates its noncopyable payload in place`() {
         struct Counter: ~Copyable { var count: Int }
         let mutable = Ownership.Mutable(Counter(count: 0))
         mutable.value.count += 5
@@ -64,7 +64,7 @@ extension `Ownership Mutable Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Mutable Tests`.`Integration behavior` {
+extension `Mutable owners share direct access to their stored value`.`Unchecked mutable wrappers permit explicit transfer across tasks` {
     @Test
     func `Unchecked opt-in wraps a Mutable and passes across Sendable`() async {
         let unchecked = Ownership.Mutable<Int>.Unchecked(0)

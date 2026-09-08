@@ -3,14 +3,14 @@ import Testing
 import Ownership
 
 @Suite
-struct `Ownership Unique Tests` {
-    @Suite struct `Unit behavior` {}
-    @Suite struct `Edge Case` {}
-    @Suite struct `Integration behavior` {}
-    @Suite(.serialized) struct `Performance behavior` {}
+struct `Unique owners preserve exclusive values through access and consumption` {
+    @Suite struct `Unique ownership supports reads mutations cloning and span access` {}
+    @Suite struct `Unique owners preserve struct class optional array and noncopyable payloads` {}
+    @Suite struct `Independent and nested unique owners preserve lifetime and borrowed access` {}
+    @Suite(.serialized) struct `Unique ownership supports repeated allocation reads and mutations` {}
 }
 
-extension `Ownership Unique Tests`.`Unit behavior` {
+extension `Unique owners preserve exclusive values through access and consumption`.`Unique ownership supports reads mutations cloning and span access` {
     @Test
     func `init heap-allocates value`() {
         let unique = Ownership.Unique<Int>(42)
@@ -64,9 +64,9 @@ extension `Ownership Unique Tests`.`Unit behavior` {
     }
 }
 
-extension `Ownership Unique Tests`.`Edge Case` {
+extension `Unique owners preserve exclusive values through access and consumption`.`Unique owners preserve struct class optional array and noncopyable payloads` {
     @Test
-    func `works with struct types`() {
+    func `A unique owner preserves struct mutations through consumption`() {
         struct Point: Equatable {
             var x: Double
             var y: Double
@@ -84,7 +84,7 @@ extension `Ownership Unique Tests`.`Edge Case` {
     }
 
     @Test
-    func `works with class types`() {
+    func `A unique owner exposes its stored class payload`() {
         class Counter {
             var value: Int
             init(_ value: Int) { self.value = value }
@@ -95,7 +95,7 @@ extension `Ownership Unique Tests`.`Edge Case` {
     }
 
     @Test
-    func `works with optional types`() {
+    func `A unique owner updates a present optional value to nil`() {
         var unique = Ownership.Unique<Int?>(42)
         #expect(unique.value == 42)
 
@@ -104,7 +104,7 @@ extension `Ownership Unique Tests`.`Edge Case` {
     }
 
     @Test
-    func `works with array types`() {
+    func `A unique owner preserves mutations to its stored array`() {
         var unique = Ownership.Unique<[Int]>([1, 2, 3])
         unique.value.append(4)
         #expect(unique.value == [1, 2, 3, 4])
@@ -136,7 +136,7 @@ extension `Ownership Unique Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Unique Tests`.`Integration behavior` {
+extension `Unique owners preserve exclusive values through access and consumption`.`Independent and nested unique owners preserve lifetime and borrowed access` {
     @Test
     func `deinit deallocates memory`() {
 
@@ -168,9 +168,9 @@ extension `Ownership Unique Tests`.`Integration behavior` {
     }
 }
 
-extension `Ownership Unique Tests`.`Performance behavior` {
+extension `Unique owners preserve exclusive values through access and consumption`.`Unique ownership supports repeated allocation reads and mutations` {
     @Test
-    func `allocation and deallocation`() {
+    func `Unique owners can be repeatedly allocated and consumed`() {
 
         for _ in 0..<10 {
             for _ in 0..<1000 {
@@ -188,7 +188,7 @@ extension `Ownership Unique Tests`.`Performance behavior` {
     }
 
     @Test
-    func `value read access`() {
+    func `Unique values can be read repeatedly`() {
         let unique = Ownership.Unique<Int>(42)
 
         for _ in 0..<10 {
@@ -205,7 +205,7 @@ extension `Ownership Unique Tests`.`Performance behavior` {
     }
 
     @Test
-    func `value mutate access`() {
+    func `Unique values can be mutated repeatedly`() {
         var unique = Ownership.Unique<Int>(0)
 
         for _ in 0..<10 {

@@ -3,13 +3,13 @@ import Testing
 import Synchronization
 
 @Suite
-struct `Ownership Latch Tests` {
-    @Suite struct `Unit behavior` {}
-    @Suite struct `Edge Case` {}
-    @Suite struct `Integration behavior` {}
+struct `Latches publish and transfer one stored value` {
+    @Suite struct `Latch construction publication and consumption preserve occupancy` {}
+    @Suite struct `Latch state distinguishes empty stored and consumed values` {}
+    @Suite struct `Latches transfer class and noncopyable payloads to a single consumer` {}
 }
 
-extension `Ownership Latch Tests`.`Unit behavior` {
+extension `Latches publish and transfer one stored value`.`Latch construction publication and consumption preserve occupancy` {
     @Test
     func `init() creates an empty latch`() {
         let latch = Ownership.Latch<Int>()
@@ -44,7 +44,7 @@ extension `Ownership Latch Tests`.`Unit behavior` {
     }
 }
 
-extension `Ownership Latch Tests`.`Edge Case` {
+extension `Latches publish and transfer one stored value`.`Latch state distinguishes empty stored and consumed values` {
     @Test
     func `take() after take() returns nil`() {
         let latch = Ownership.Latch<Int>(3)
@@ -78,7 +78,7 @@ extension `Ownership Latch Tests`.`Edge Case` {
     }
 }
 
-extension `Ownership Latch Tests`.`Integration behavior` {
+extension `Latches publish and transfer one stored value`.`Latches transfer class and noncopyable payloads to a single consumer` {
     @Test
     func `latch carries a class reference identity across take`() {
         final class Marker: Sendable {
@@ -123,7 +123,7 @@ private final class LatchDestructions: Sendable {
 }
 
 @Suite
-struct `Latch transfer and finalization` {
+struct `Latch transfers preserve single delivery and payload destruction` {
     @Test
     func `initialization transfers a disconnected mutable object to another task`() async {
         final class Payload {
