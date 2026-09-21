@@ -19,8 +19,14 @@ extension `Tagged values forward borrowed ownership access`.`Tagged borrowed own
 
             typealias Borrowed = Ownership.Borrow<Self>
         }
-        func _requireBorrowProtocol<T: Ownership.Borrow.`Protocol` & ~Copyable>(_: T.Type) {}
-        _requireBorrowProtocol(Tagged<Phantom, Resource>.self)
-        #expect(Bool(true))
+        func requireBorrowProtocol<T: Ownership.Borrow.`Protocol` & ~Copyable>(
+            _: T.Type,
+            borrowed: T.Borrowed.Type
+        ) {}
+
+        requireBorrowProtocol(
+            Tagged<Phantom, Resource>.self,
+            borrowed: Ownership.Borrow<Resource>.self
+        )
     }
 }
