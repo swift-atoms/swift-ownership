@@ -23,7 +23,7 @@ extension `Inout wrappers preserve source mutations and payload capabilities`.`I
     @Test
     func `init(_:) from typed pointer writes through`() {
         var source = 0
-        unsafe withUnsafeMutablePointer(to: &source) { pointer in
+        withUnsafeMutablePointer(to: &source) { pointer in
             let ref = unsafe Ownership.Inout(pointer)
             ref.value = 200
         }

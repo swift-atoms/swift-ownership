@@ -14,7 +14,7 @@ extension `Draining inout backed views reaches an empty state` {
         var count: Int = 0
     }
 
-    struct Ring<E: ~Copyable>: ~Copyable {
+    @safe struct Ring<E: ~Copyable>: ~Copyable {
         var header: Header = .init()
 
         var trips: Int = 0
@@ -23,7 +23,7 @@ extension `Draining inout backed views reaches an empty state` {
 
         init(capacity: Int) {
             self.capacity = capacity
-            self.storage = unsafe .allocate(capacity: capacity)
+            unsafe self.storage = .allocate(capacity: capacity)
         }
 
         deinit {

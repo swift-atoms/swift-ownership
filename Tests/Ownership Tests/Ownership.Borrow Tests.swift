@@ -22,8 +22,8 @@ extension `Borrow wrappers preserve access to borrowed values`.`Borrow construct
     @Test
     func `init(_:) from typed pointer yields the value`() {
         var source = 99
-        unsafe withUnsafePointer(to: &source) { pointer in
-            let ref = Ownership.Borrow(pointer)
+        withUnsafePointer(to: &source) { pointer in
+            let ref = unsafe Ownership.Borrow(pointer)
             #expect(ref.value == 99)
         }
     }
