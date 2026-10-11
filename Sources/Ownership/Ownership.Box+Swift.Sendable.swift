@@ -1,1 +1,1 @@
-extension Ownership.Box: @unchecked Swift.Sendable where Value: Swift.Sendable & ~Copyable {}
+extension Ownership.Box: @unchecked Swift::Sendable where Value: Swift::Sendable & ~Copyable {}

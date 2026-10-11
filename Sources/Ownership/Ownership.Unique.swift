@@ -43,7 +43,7 @@ extension Ownership.Unique where Value: ~Copyable {
 extension Ownership.Unique where Value: ~Copyable {
 
     @inlinable
-    public var span: Swift.Span<Value> {
+    public var span: Swift::Span<Value> {
         @_lifetime(borrow self)
         borrowing get {
             unsafe Span(_unsafeStart: _storage, count: 1)
