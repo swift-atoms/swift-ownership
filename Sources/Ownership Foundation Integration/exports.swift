@@ -1,2 +1,2 @@
-@_exported public import Ownership
 import Foundation
+@_exported public import Ownership

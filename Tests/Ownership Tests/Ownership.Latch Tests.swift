@@ -1,6 +1,6 @@
 import Ownership
-import Testing
 import Synchronization
+import Testing
 
 @Suite
 struct `Latches publish and transfer one stored value` {

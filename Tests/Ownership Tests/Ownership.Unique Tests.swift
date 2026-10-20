@@ -1,6 +1,5 @@
-import Testing
-
 import Ownership
+import Testing
 
 @Suite
 struct `Unique owners preserve exclusive values through access and consumption` {

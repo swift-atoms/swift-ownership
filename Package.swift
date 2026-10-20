@@ -27,22 +27,22 @@ let package = Package(
         .target(
             name: "Ownership",
             dependencies: [
-                .product(name: "Tagged", package: "swift-tagged"),
+                .product(name: "Tagged", package: "swift-tagged")
             ],
             path: "Sources/Ownership"
         ),
-        
+
         .target(
             name: "Ownership Foundation Integration",
             dependencies: [
-                .target(name: "Ownership"),
+                .target(name: "Ownership")
             ],
             path: "Sources/Ownership Foundation Integration"
         ),
         .target(
             name: "Ownership Test Support",
             dependencies: [
-                .target(name: "Ownership"),
+                .target(name: "Ownership")
             ],
             path: "Tests/Support"
         ),
@@ -60,14 +60,15 @@ let package = Package(
 )
 
 for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
-    target.swiftSettings = (target.swiftSettings ?? []) + [
-        .strictMemorySafety(),
-        .enableUpcomingFeature("ExistentialAny"),
-        .enableUpcomingFeature("InternalImportsByDefault"),
-        .enableUpcomingFeature("MemberImportVisibility"),
-        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
-        .enableUpcomingFeature("InferIsolatedConformances"),
-        .enableExperimentalFeature("Lifetimes"),
-        .treatAllWarnings(as: .error),
-    ]
+    target.swiftSettings =
+        (target.swiftSettings ?? []) + [
+            .strictMemorySafety(),
+            .enableUpcomingFeature("ExistentialAny"),
+            .enableUpcomingFeature("InternalImportsByDefault"),
+            .enableUpcomingFeature("MemberImportVisibility"),
+            .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+            .enableUpcomingFeature("InferIsolatedConformances"),
+            .enableExperimentalFeature("Lifetimes"),
+            .treatAllWarnings(as: .error),
+        ]
 }
