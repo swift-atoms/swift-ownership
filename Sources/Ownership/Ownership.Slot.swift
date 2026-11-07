@@ -50,3 +50,56 @@ extension Ownership.Slot where Value: ~Copyable {
         _state.load(ordering: .acquiring) == State.full
     }
 }
+
+extension Ownership.Slot where Value: ~Copyable {
+
+    public func store(_ value: consuming sending Value) -> Value? {
+
+        let (reserved, _) = _state.compareExchange(
+            expected: State.empty,
+            desired: State.initializing,
+            ordering: .acquiringAndReleasing
+        )
+        guard reserved else {
+            return value
+        }
+
+        unsafe _storage.initialize(to: value)
+
+        _state.store(State.full, ordering: .releasing)
+        return nil
+    }
+
+    public func store(__unchecked value: consuming sending Value) {
+        if case .some = store(value) {
+            preconditionFailure("Ownership.Slot.store(__unchecked:): already occupied")
+        }
+    }
+}
+
+extension Ownership.Slot where Value: ~Copyable {
+
+    public func take() -> sending Value? {
+
+        let (exchanged, _) = _state.compareExchange(
+            expected: State.full,
+            desired: State.draining,
+            ordering: .acquiringAndReleasing
+        )
+        guard exchanged else {
+            return nil
+        }
+
+        let value = unsafe _storage.move()
+
+        _state.store(State.empty, ordering: .releasing)
+        return value
+    }
+
+    public func take(__unchecked: Void) -> sending Value {
+        guard let value = take() else {
+            preconditionFailure("Ownership.Slot.take(__unchecked:): already empty")
+        }
+        return value
+    }
+}
