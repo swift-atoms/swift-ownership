@@ -1,14 +1,23 @@
 import Ownership
 import Testing
 
-@Suite
-struct `Borrow wrappers preserve access to borrowed values` {
+enum `Ownership.Borrow Tests` {}
+
+extension `Ownership.Borrow Tests` {
+    @Suite
+    struct `Borrow wrappers preserve access to borrowed values` {
+    }
+}
+
+extension `Ownership.Borrow Tests`.`Borrow wrappers preserve access to borrowed values` {
     @Suite struct `Borrow construction and repeated access preserve the source value` {}
+
     @Suite struct `Borrow wrappers preserve struct and class payloads within their lifetime` {}
+
     @Suite struct `Optional and nested borrow wrappers preserve value access` {}
 }
 
-extension `Borrow wrappers preserve access to borrowed values`.`Borrow construction and repeated access preserve the source value` {
+extension `Ownership.Borrow Tests`.`Borrow wrappers preserve access to borrowed values`.`Borrow construction and repeated access preserve the source value` {
     @Test
     func `init(borrowing:) yields the borrowed value`() {
         let source = 42
@@ -41,7 +50,7 @@ extension `Borrow wrappers preserve access to borrowed values`.`Borrow construct
     }
 }
 
-extension `Borrow wrappers preserve access to borrowed values`.`Borrow wrappers preserve struct and class payloads within their lifetime` {
+extension `Ownership.Borrow Tests`.`Borrow wrappers preserve access to borrowed values`.`Borrow wrappers preserve struct and class payloads within their lifetime` {
     @Test
     func `value accessor works with struct types`() {
         struct Point: Equatable {
@@ -85,7 +94,7 @@ extension `Borrow wrappers preserve access to borrowed values`.`Borrow wrappers 
     }
 }
 
-extension `Borrow wrappers preserve access to borrowed values`.`Optional and nested borrow wrappers preserve value access` {
+extension `Ownership.Borrow Tests`.`Borrow wrappers preserve access to borrowed values`.`Optional and nested borrow wrappers preserve value access` {
     @Test
     func `Optional<Ownership.Borrow<Value>> expresses peek-style API`() {
         let value = 33

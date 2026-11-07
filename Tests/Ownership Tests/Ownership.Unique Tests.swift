@@ -1,15 +1,25 @@
 import Ownership
 import Testing
 
-@Suite
-struct `Unique owners preserve exclusive values through access and consumption` {
+enum `Ownership.Unique Tests` {}
+
+extension `Ownership.Unique Tests` {
+    @Suite
+    struct `Unique owners preserve exclusive values through access and consumption` {
+    }
+}
+
+extension `Ownership.Unique Tests`.`Unique owners preserve exclusive values through access and consumption` {
     @Suite struct `Unique ownership supports reads mutations cloning and span access` {}
+
     @Suite struct `Unique owners preserve struct class optional array and noncopyable payloads` {}
+
     @Suite struct `Independent and nested unique owners preserve lifetime and borrowed access` {}
+
     @Suite(.serialized) struct `Unique ownership supports repeated allocation reads and mutations` {}
 }
 
-extension `Unique owners preserve exclusive values through access and consumption`.`Unique ownership supports reads mutations cloning and span access` {
+extension `Ownership.Unique Tests`.`Unique owners preserve exclusive values through access and consumption`.`Unique ownership supports reads mutations cloning and span access` {
     @Test
     func `init heap-allocates value`() {
         let unique = Ownership.Unique<Int>(42)
@@ -63,7 +73,7 @@ extension `Unique owners preserve exclusive values through access and consumptio
     }
 }
 
-extension `Unique owners preserve exclusive values through access and consumption`.`Unique owners preserve struct class optional array and noncopyable payloads` {
+extension `Ownership.Unique Tests`.`Unique owners preserve exclusive values through access and consumption`.`Unique owners preserve struct class optional array and noncopyable payloads` {
     @Test
     func `A unique owner preserves struct mutations through consumption`() {
         struct Point: Equatable {
@@ -135,7 +145,7 @@ extension `Unique owners preserve exclusive values through access and consumptio
     }
 }
 
-extension `Unique owners preserve exclusive values through access and consumption`.`Independent and nested unique owners preserve lifetime and borrowed access` {
+extension `Ownership.Unique Tests`.`Unique owners preserve exclusive values through access and consumption`.`Independent and nested unique owners preserve lifetime and borrowed access` {
     @Test
     func `deinit deallocates memory`() {
 
@@ -167,7 +177,7 @@ extension `Unique owners preserve exclusive values through access and consumptio
     }
 }
 
-extension `Unique owners preserve exclusive values through access and consumption`.`Unique ownership supports repeated allocation reads and mutations` {
+extension `Ownership.Unique Tests`.`Unique owners preserve exclusive values through access and consumption`.`Unique ownership supports repeated allocation reads and mutations` {
     @Test
     func `Unique owners can be repeatedly allocated and consumed`() {
 

@@ -1,14 +1,23 @@
 import Ownership
 import Testing
 
-@Suite
-struct `Immutable ownership preserves shared values and identity` {
+enum `Ownership.Immutable Tests` {}
+
+extension `Ownership.Immutable Tests` {
+    @Suite
+    struct `Immutable ownership preserves shared values and identity` {
+    }
+}
+
+extension `Ownership.Immutable Tests`.`Immutable ownership preserves shared values and identity` {
     @Suite struct `Immutable owners retain their value across repeated reads and shared references` {}
+
     @Suite struct `Immutable owners preserve struct and class payloads` {}
+
     @Suite struct `Sendable immutable owners preserve their value across tasks` {}
 }
 
-extension `Immutable ownership preserves shared values and identity`.`Immutable owners retain their value across repeated reads and shared references` {
+extension `Ownership.Immutable Tests`.`Immutable ownership preserves shared values and identity`.`Immutable owners retain their value across repeated reads and shared references` {
     @Test
     func `init(_:) stores the value`() {
         let immutable = Ownership.Immutable(42)
@@ -31,7 +40,7 @@ extension `Immutable ownership preserves shared values and identity`.`Immutable 
     }
 }
 
-extension `Immutable ownership preserves shared values and identity`.`Immutable owners preserve struct and class payloads` {
+extension `Ownership.Immutable Tests`.`Immutable ownership preserves shared values and identity`.`Immutable owners preserve struct and class payloads` {
     @Test
     func `An immutable owner preserves its stored struct value`() {
         struct Point: Equatable, Sendable {
@@ -53,7 +62,7 @@ extension `Immutable ownership preserves shared values and identity`.`Immutable 
     }
 }
 
-extension `Immutable ownership preserves shared values and identity`.`Sendable immutable owners preserve their value across tasks` {
+extension `Ownership.Immutable Tests`.`Immutable ownership preserves shared values and identity`.`Sendable immutable owners preserve their value across tasks` {
     @Test
     func `An immutable owner preserves its value in a detached task`() async {
         let immutable = Ownership.Immutable(99)

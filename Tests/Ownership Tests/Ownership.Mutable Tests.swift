@@ -1,14 +1,23 @@
 import Ownership
 import Testing
 
-@Suite
-struct `Mutable owners share direct access to their stored value` {
+enum `Ownership.Mutable Tests` {}
+
+extension `Ownership.Mutable Tests` {
+    @Suite
+    struct `Mutable owners share direct access to their stored value` {
+    }
+}
+
+extension `Ownership.Mutable Tests`.`Mutable owners share direct access to their stored value` {
     @Suite struct `Mutable owner aliases observe the same stored mutations` {}
+
     @Suite struct `Mutable owners borrow and modify noncopyable payloads` {}
+
     @Suite struct `Unchecked mutable wrappers permit explicit transfer across tasks` {}
 }
 
-extension `Mutable owners share direct access to their stored value`.`Mutable owner aliases observe the same stored mutations` {
+extension `Ownership.Mutable Tests`.`Mutable owners share direct access to their stored value`.`Mutable owner aliases observe the same stored mutations` {
     @Test
     func `init(_:) stores the value`() {
         let mutable = Ownership.Mutable(42)
@@ -46,7 +55,7 @@ extension `Mutable owners share direct access to their stored value`.`Mutable ow
     }
 }
 
-extension `Mutable owners share direct access to their stored value`.`Mutable owners borrow and modify noncopyable payloads` {
+extension `Ownership.Mutable Tests`.`Mutable owners share direct access to their stored value`.`Mutable owners borrow and modify noncopyable payloads` {
     @Test
     func `A mutable owner borrows its noncopyable payload for reading`() {
         struct Handle: ~Copyable { let fd: Int32 }
@@ -64,7 +73,7 @@ extension `Mutable owners share direct access to their stored value`.`Mutable ow
     }
 }
 
-extension `Mutable owners share direct access to their stored value`.`Unchecked mutable wrappers permit explicit transfer across tasks` {
+extension `Ownership.Mutable Tests`.`Mutable owners share direct access to their stored value`.`Unchecked mutable wrappers permit explicit transfer across tasks` {
     @Test
     func `Unchecked opt-in wraps a Mutable and passes across Sendable`() async {
         let unchecked = Ownership.Mutable<Int>.Unchecked(0)

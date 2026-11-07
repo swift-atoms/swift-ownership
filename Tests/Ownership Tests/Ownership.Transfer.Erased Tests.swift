@@ -1,13 +1,21 @@
 import Ownership
 import Testing
 
-@Suite
-struct `Erased transfers preserve boxed payloads and destruction` {
+enum `Ownership.Transfer.Erased Tests` {}
+
+extension `Ownership.Transfer.Erased Tests` {
+    @Suite
+    struct `Erased transfers preserve boxed payloads and destruction` {
+    }
+}
+
+extension `Ownership.Transfer.Erased Tests`.`Erased transfers preserve boxed payloads and destruction` {
     @Suite struct `Erased outgoing transfers consume or destroy their boxed payload` {}
+
     @Suite struct `Erased incoming transfers store boxed payloads for optional consumption` {}
 }
 
-extension `Erased transfers preserve boxed payloads and destruction`.`Erased outgoing transfers consume or destroy their boxed payload` {
+extension `Ownership.Transfer.Erased Tests`.`Erased transfers preserve boxed payloads and destruction`.`Erased outgoing transfers consume or destroy their boxed payload` {
     @Test
     func `make then consume round-trips a struct payload`() {
         struct Payload: Equatable {
@@ -34,7 +42,7 @@ extension `Erased transfers preserve boxed payloads and destruction`.`Erased out
     }
 }
 
-extension `Erased transfers preserve boxed payloads and destruction`.`Erased incoming transfers store boxed payloads for optional consumption` {
+extension `Ownership.Transfer.Erased Tests`.`Erased transfers preserve boxed payloads and destruction`.`Erased incoming transfers store boxed payloads for optional consumption` {
     @Test
     func `token.store then consume round-trips a boxed struct`() {
         struct Payload: Equatable {

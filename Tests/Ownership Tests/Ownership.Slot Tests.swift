@@ -1,15 +1,25 @@
 import Ownership
 import Testing
 
-@Suite
-struct `Ownership slots preserve reusable storage and value transfer` {
+enum `Ownership.Slot Tests` {}
+
+extension `Ownership.Slot Tests` {
+    @Suite
+    struct `Ownership slots preserve reusable storage and value transfer` {
+    }
+}
+
+extension `Ownership.Slot Tests`.`Ownership slots preserve reusable storage and value transfer` {
     @Suite struct `Slot construction storage and consumption preserve occupancy` {}
+
     @Suite struct `Occupied slots reject replacement while consumed slots remain reusable` {}
+
     @Suite struct `Slots preserve struct class and noncopyable payloads through repeated cycles` {}
+
     @Suite struct `Concurrent slot producers and consumers transfer every value once` {}
 }
 
-extension `Ownership slots preserve reusable storage and value transfer`.`Slot construction storage and consumption preserve occupancy` {
+extension `Ownership.Slot Tests`.`Ownership slots preserve reusable storage and value transfer`.`Slot construction storage and consumption preserve occupancy` {
     @Test
     func `init() creates an empty slot`() {
         let slot = Ownership.Slot<Int>()
@@ -46,7 +56,7 @@ extension `Ownership slots preserve reusable storage and value transfer`.`Slot c
     }
 }
 
-extension `Ownership slots preserve reusable storage and value transfer`.`Occupied slots reject replacement while consumed slots remain reusable` {
+extension `Ownership.Slot Tests`.`Ownership slots preserve reusable storage and value transfer`.`Occupied slots reject replacement while consumed slots remain reusable` {
     @Test
     func `store(_:) on full slot bounces the value back`() {
         let slot = Ownership.Slot<Int>(1)
@@ -79,7 +89,7 @@ extension `Ownership slots preserve reusable storage and value transfer`.`Occupi
     }
 }
 
-extension `Ownership slots preserve reusable storage and value transfer`.`Slots preserve struct class and noncopyable payloads through repeated cycles` {
+extension `Ownership.Slot Tests`.`Ownership slots preserve reusable storage and value transfer`.`Slots preserve struct class and noncopyable payloads through repeated cycles` {
     @Test
     func `An ownership slot transfers the stored struct value`() {
         struct Pair: Equatable {
@@ -132,7 +142,7 @@ extension `Ownership slots preserve reusable storage and value transfer`.`Slots 
     }
 }
 
-extension `Ownership slots preserve reusable storage and value transfer`.`Concurrent slot producers and consumers transfer every value once` {
+extension `Ownership.Slot Tests`.`Ownership slots preserve reusable storage and value transfer`.`Concurrent slot producers and consumers transfer every value once` {
     @Test
     func `concurrent single-producer single-consumer store take never loses or duplicates a value`()
         async

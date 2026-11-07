@@ -3,15 +3,26 @@ import Testing
 
 @Suite
 
-struct `Transfer wrappers preserve payloads reference identity and release behavior` {
+enum `Ownership.Transfer Tests` {}
+
+extension `Ownership.Transfer Tests` {
+    struct `Transfer wrappers preserve payloads reference identity and release behavior` {
+    }
+}
+
+extension `Ownership.Transfer Tests`.`Transfer wrappers preserve payloads reference identity and release behavior` {
     @Suite struct `Outgoing value tokens expose the stored payload through copyable handles` {}
+
     @Suite struct `Incoming value tokens store payloads for optional consumption` {}
+
     @Suite struct `Outgoing retained transfers preserve object identity and release abandoned references` {}
+
     @Suite struct `Incoming retained transfers preserve object identity through optional consumption` {}
+
     @Suite struct `Composed incoming and outgoing transfers preserve channel payloads and identity` {}
 }
 
-extension `Transfer wrappers preserve payloads reference identity and release behavior`.`Outgoing value tokens expose the stored payload through copyable handles` {
+extension `Ownership.Transfer Tests`.`Transfer wrappers preserve payloads reference identity and release behavior`.`Outgoing value tokens expose the stored payload through copyable handles` {
     @Test
     func `token take() retrieves the stored value`() {
         let outgoing = Ownership.Transfer.Value<Int>.Outgoing(42)
@@ -42,7 +53,7 @@ extension `Transfer wrappers preserve payloads reference identity and release be
     }
 }
 
-extension `Transfer wrappers preserve payloads reference identity and release behavior`.`Incoming value tokens store payloads for optional consumption` {
+extension `Ownership.Transfer Tests`.`Transfer wrappers preserve payloads reference identity and release behavior`.`Incoming value tokens store payloads for optional consumption` {
     @Test
     func `token.store(_) then consume() round-trips`() {
         let incoming = Ownership.Transfer.Value<Int>.Incoming()
@@ -66,7 +77,7 @@ extension `Transfer wrappers preserve payloads reference identity and release be
     }
 }
 
-extension `Transfer wrappers preserve payloads reference identity and release behavior`.`Outgoing retained transfers preserve object identity and release abandoned references` {
+extension `Ownership.Transfer Tests`.`Transfer wrappers preserve payloads reference identity and release behavior`.`Outgoing retained transfers preserve object identity and release abandoned references` {
     @Test
     func `consume() returns the strong reference`() {
         final class Node {
@@ -105,7 +116,7 @@ extension `Transfer wrappers preserve payloads reference identity and release be
     }
 }
 
-extension `Transfer wrappers preserve payloads reference identity and release behavior`.`Incoming retained transfers preserve object identity through optional consumption` {
+extension `Ownership.Transfer Tests`.`Transfer wrappers preserve payloads reference identity and release behavior`.`Incoming retained transfers preserve object identity through optional consumption` {
     @Test
     func `token.store then consume round-trips an object`() {
         final class Service {
@@ -142,7 +153,7 @@ extension `Transfer wrappers preserve payloads reference identity and release be
     }
 }
 
-extension `Transfer wrappers preserve payloads reference identity and release behavior`.`Composed incoming and outgoing transfers preserve channel payloads and identity` {
+extension `Ownership.Transfer Tests`.`Transfer wrappers preserve payloads reference identity and release behavior`.`Composed incoming and outgoing transfers preserve channel payloads and identity` {
     @Test
     func `Outgoing + Incoming together model a bidirectional channel`() {
         let request = Ownership.Transfer.Value<Int>.Outgoing(42)

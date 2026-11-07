@@ -1,14 +1,23 @@
 import Ownership
 import Testing
 
-@Suite
-struct `Inout wrappers preserve source mutations and payload capabilities` {
+enum `Ownership.Inout Tests` {}
+
+extension `Ownership.Inout Tests` {
+    @Suite
+    struct `Inout wrappers preserve source mutations and payload capabilities` {
+    }
+}
+
+extension `Ownership.Inout Tests`.`Inout wrappers preserve source mutations and payload capabilities` {
     @Suite struct `Inout construction admits supported payloads and writes through to source storage` {}
+
     @Suite struct `Inout accessors preserve nested mutations across copyable and noncopyable payloads` {}
+
     @Suite struct `Repeated inout writes preserve readable source state` {}
 }
 
-extension `Inout wrappers preserve source mutations and payload capabilities`.`Inout construction admits supported payloads and writes through to source storage` {
+extension `Ownership.Inout Tests`.`Inout wrappers preserve source mutations and payload capabilities`.`Inout construction admits supported payloads and writes through to source storage` {
     @Test
     func `init(mutating:) writes reach the source`() {
         var source = 0
@@ -53,7 +62,7 @@ extension `Inout wrappers preserve source mutations and payload capabilities`.`I
     }
 }
 
-extension `Inout wrappers preserve source mutations and payload capabilities`.`Inout accessors preserve nested mutations across copyable and noncopyable payloads` {
+extension `Ownership.Inout Tests`.`Inout wrappers preserve source mutations and payload capabilities`.`Inout accessors preserve nested mutations across copyable and noncopyable payloads` {
     @Test
     func `V12 — Copyable Value uses get + _modify (pure read works)`() {
         struct Counter { var count: Int }
@@ -116,7 +125,7 @@ extension `Inout wrappers preserve source mutations and payload capabilities`.`I
     }
 }
 
-extension `Inout wrappers preserve source mutations and payload capabilities`.`Repeated inout writes preserve readable source state` {
+extension `Ownership.Inout Tests`.`Inout wrappers preserve source mutations and payload capabilities`.`Repeated inout writes preserve readable source state` {
     @Test
     func `round-trip — source value survives a write-then-read`() {
         var source = 0
@@ -149,7 +158,7 @@ private struct NEResource: ~Escapable, ~Copyable {
     init(_ id: Int) { self.id = id }
 }
 
-extension `Inout wrappers preserve source mutations and payload capabilities`.`Inout construction admits supported payloads and writes through to source storage` {
+extension `Ownership.Inout Tests`.`Inout wrappers preserve source mutations and payload capabilities`.`Inout construction admits supported payloads and writes through to source storage` {
 
     @Test
     func `Inout construction type checks for a nonescapable resource`() {

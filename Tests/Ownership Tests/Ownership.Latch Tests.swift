@@ -2,14 +2,23 @@ import Ownership
 import Synchronization
 import Testing
 
-@Suite
-struct `Latches publish and transfer one stored value` {
+enum `Ownership.Latch Tests` {}
+
+extension `Ownership.Latch Tests` {
+    @Suite
+    struct `Latches publish and transfer one stored value` {
+    }
+}
+
+extension `Ownership.Latch Tests`.`Latches publish and transfer one stored value` {
     @Suite struct `Latch construction publication and consumption preserve occupancy` {}
+
     @Suite struct `Latch state distinguishes empty stored and consumed values` {}
+
     @Suite struct `Latches transfer class and noncopyable payloads to a single consumer` {}
 }
 
-extension `Latches publish and transfer one stored value`.`Latch construction publication and consumption preserve occupancy` {
+extension `Ownership.Latch Tests`.`Latches publish and transfer one stored value`.`Latch construction publication and consumption preserve occupancy` {
     @Test
     func `init() creates an empty latch`() {
         let latch = Ownership.Latch<Int>()
@@ -44,7 +53,7 @@ extension `Latches publish and transfer one stored value`.`Latch construction pu
     }
 }
 
-extension `Latches publish and transfer one stored value`.`Latch state distinguishes empty stored and consumed values` {
+extension `Ownership.Latch Tests`.`Latches publish and transfer one stored value`.`Latch state distinguishes empty stored and consumed values` {
     @Test
     func `take() after take() returns nil`() {
         let latch = Ownership.Latch<Int>(3)
@@ -78,7 +87,7 @@ extension `Latches publish and transfer one stored value`.`Latch state distingui
     }
 }
 
-extension `Latches publish and transfer one stored value`.`Latches transfer class and noncopyable payloads to a single consumer` {
+extension `Ownership.Latch Tests`.`Latches publish and transfer one stored value`.`Latches transfer class and noncopyable payloads to a single consumer` {
     @Test
     func `latch carries a class reference identity across take`() {
         final class Marker: Sendable {
@@ -122,88 +131,90 @@ private final class LatchDestructions: Sendable {
     let count = Mutex(0)
 }
 
-@Suite
-struct `Latch transfers preserve single delivery and payload destruction` {
-    @Test
-    func `initialization transfers a disconnected mutable object to another task`() async {
-        final class Payload {
-            var value: Int
-            init(_ value: Int) { self.value = value }
-        }
-        let payload = Payload(41)
-        let identity = ObjectIdentifier(payload)
-        let latch = Ownership.Latch(payload)
-        let result = await Task.detached {
-            guard let received = latch.take() else { return false }
-            received.value += 1
-            return ObjectIdentifier(received) == identity && received.value == 42
-        }.value
-        #expect(result)
-        #expect(!latch.hasValue)
-    }
-
-    @Test
-    func `concurrent takers receive a noncopyable payload exactly once`() async {
-        struct Payload: ~Copyable { let value: Int }
-        let latch = Ownership.Latch(Payload(value: 42))
-        let values = await withTaskGroup(of: Int?.self) { group in
-            for _ in 0..<64 {
-                group.addTask {
-                    guard let received = latch.take() else { return nil }
-                    return received.value
-                }
+extension `Ownership.Latch Tests` {
+    @Suite
+    struct `Latch transfers preserve single delivery and payload destruction` {
+        @Test
+        func `initialization transfers a disconnected mutable object to another task`() async {
+            final class Payload {
+                var value: Int
+                init(_ value: Int) { self.value = value }
             }
-            var result: [Int] = []
-            for await value in group {
-                if let value { result.append(value) }
-            }
-            return result
-        }
-        #expect(values == [42])
-        #expect(!latch.hasValue)
-    }
-
-    @Test
-    func `dropping a full latch destroys its noncopyable payload exactly once`() {
-        let destructions = LatchDestructions()
-        struct Payload: ~Copyable {
-            let destructions: LatchDestructions
-            deinit { destructions.count.withLock { $0 += 1 } }
-        }
-        do {
-            let latch = Ownership.Latch(Payload(destructions: destructions))
-            #expect(latch.hasValue)
-            #expect(destructions.count.withLock { $0 } == 0)
-        }
-        #expect(destructions.count.withLock { $0 } == 1)
-    }
-
-    @Test
-    func `taking a payload makes its recipient responsible for destruction`() {
-        let destructions = LatchDestructions()
-        struct Payload: ~Copyable {
-            let destructions: LatchDestructions
-            deinit { destructions.count.withLock { $0 += 1 } }
-        }
-        let latch = Ownership.Latch(Payload(destructions: destructions))
-        do {
-            guard let payload = latch.take() else {
-                Issue.record("Expected the initialized payload")
-                return
-            }
+            let payload = Payload(41)
+            let identity = ObjectIdentifier(payload)
+            let latch = Ownership.Latch(payload)
+            let result = await Task.detached {
+                guard let received = latch.take() else { return false }
+                received.value += 1
+                return ObjectIdentifier(received) == identity && received.value == 42
+            }.value
+            #expect(result)
             #expect(!latch.hasValue)
-            #expect(destructions.count.withLock { $0 } == 0)
-            _ = consume payload
         }
-        #expect(destructions.count.withLock { $0 } == 1)
-    }
 
-    @Test
-    func `storing after consumption fails instead of republishing a value`() async {
-        await #expect(processExitsWith: .failure) {
-            let latch = Ownership.Latch(1)
-            _ = latch.take()
-            latch.store(2)
+        @Test
+        func `concurrent takers receive a noncopyable payload exactly once`() async {
+            struct Payload: ~Copyable { let value: Int }
+            let latch = Ownership.Latch(Payload(value: 42))
+            let values = await withTaskGroup(of: Int?.self) { group in
+                for _ in 0..<64 {
+                    group.addTask {
+                        guard let received = latch.take() else { return nil }
+                        return received.value
+                    }
+                }
+                var result: [Int] = []
+                for await value in group {
+                    if let value { result.append(value) }
+                }
+                return result
+            }
+            #expect(values == [42])
+            #expect(!latch.hasValue)
+        }
+
+        @Test
+        func `dropping a full latch destroys its noncopyable payload exactly once`() {
+            let destructions = LatchDestructions()
+            struct Payload: ~Copyable {
+                let destructions: LatchDestructions
+                deinit { destructions.count.withLock { $0 += 1 } }
+            }
+            do {
+                let latch = Ownership.Latch(Payload(destructions: destructions))
+                #expect(latch.hasValue)
+                #expect(destructions.count.withLock { $0 } == 0)
+            }
+            #expect(destructions.count.withLock { $0 } == 1)
+        }
+
+        @Test
+        func `taking a payload makes its recipient responsible for destruction`() {
+            let destructions = LatchDestructions()
+            struct Payload: ~Copyable {
+                let destructions: LatchDestructions
+                deinit { destructions.count.withLock { $0 += 1 } }
+            }
+            let latch = Ownership.Latch(Payload(destructions: destructions))
+            do {
+                guard let payload = latch.take() else {
+                    Issue.record("Expected the initialized payload")
+                    return
+                }
+                #expect(!latch.hasValue)
+                #expect(destructions.count.withLock { $0 } == 0)
+                _ = consume payload
+            }
+            #expect(destructions.count.withLock { $0 } == 1)
+        }
+
+        @Test
+        func `storing after consumption fails instead of republishing a value`() async {
+            await #expect(processExitsWith: .failure) {
+                let latch = Ownership.Latch(1)
+                _ = latch.take()
+                latch.store(2)
+            }
         }
     }
 }

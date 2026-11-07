@@ -3,8 +3,13 @@ import Testing
 
 @Suite
 struct `Draining inout backed views reaches an empty state` {
+}
+
+extension `Draining inout backed views reaches an empty state` {
     @Suite struct `Repeated draining through an inout view terminates` {}
+
     @Suite struct `Draining across a function boundary reaches exhaustion` {}
+
     @Suite struct `Builder draining terminates for copyable and noncopyable elements` {}
 }
 

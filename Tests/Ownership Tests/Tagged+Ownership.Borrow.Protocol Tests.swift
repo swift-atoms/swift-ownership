@@ -2,16 +2,25 @@ import Ownership
 import Tagged
 import Testing
 
-@Suite
-struct `Tagged values forward borrowed ownership access` {
+enum `Tagged+Ownership.Borrow.Protocol Tests` {}
+
+extension `Tagged+Ownership.Borrow.Protocol Tests` {
+    @Suite
+    struct `Tagged values forward borrowed ownership access` {
+    }
+}
+
+extension `Tagged+Ownership.Borrow.Protocol Tests`.`Tagged values forward borrowed ownership access` {
     @Suite struct `Tagged borrowed ownership preserves the underlying borrowed value` {}
+
     @Suite struct `No tagged borrowed ownership boundary cases are defined` {}
+
     @Suite struct `No tagged borrowed ownership integration cases are defined` {}
 }
 
 private enum Phantom {}
 
-extension `Tagged values forward borrowed ownership access`.`Tagged borrowed ownership preserves the underlying borrowed value` {
+extension `Tagged+Ownership.Borrow.Protocol Tests`.`Tagged values forward borrowed ownership access`.`Tagged borrowed ownership preserves the underlying borrowed value` {
     @Test
     func `Tagged conforms to Ownership Borrow Protocol when Underlying does`() {
 

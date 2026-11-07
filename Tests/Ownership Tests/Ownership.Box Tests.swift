@@ -1,15 +1,25 @@
 import Ownership
 import Testing
 
-@Suite
-struct `Ownership boxes preserve value semantics through shared storage` {
+enum `Ownership.Box Tests` {}
+
+extension `Ownership.Box Tests` {
+    @Suite
+    struct `Ownership boxes preserve value semantics through shared storage` {
+    }
+}
+
+extension `Ownership.Box Tests`.`Ownership boxes preserve value semantics through shared storage` {
     @Suite struct `Ownership box construction mutation and cloning preserve stored values` {}
+
     @Suite struct `Mutating shared ownership boxes separates their values and storage identities` {}
+
     @Suite struct `Nested boxes and explicit cloning preserve independent value semantics` {}
+
     @Suite struct `Ownership boxes share noncopyable payloads and destroy them exactly once` {}
 }
 
-extension `Ownership boxes preserve value semantics through shared storage`.`Ownership box construction mutation and cloning preserve stored values` {
+extension `Ownership.Box Tests`.`Ownership boxes preserve value semantics through shared storage`.`Ownership box construction mutation and cloning preserve stored values` {
     @Test
     func `init(_:) stores the value`() {
         let box = Ownership.Box<Int>(42)
@@ -53,7 +63,7 @@ extension `Ownership boxes preserve value semantics through shared storage`.`Own
     }
 }
 
-extension `Ownership boxes preserve value semantics through shared storage`.`Mutating shared ownership boxes separates their values and storage identities` {
+extension `Ownership.Box Tests`.`Ownership boxes preserve value semantics through shared storage`.`Mutating shared ownership boxes separates their values and storage identities` {
     @Test
     func `shared cell CoW — mutation on copy leaves original untouched`() {
         let a = Ownership.Box<[Int]>([1, 2, 3])
@@ -96,7 +106,7 @@ extension `Ownership boxes preserve value semantics through shared storage`.`Mut
     }
 }
 
-extension `Ownership boxes preserve value semantics through shared storage`.`Nested boxes and explicit cloning preserve independent value semantics` {
+extension `Ownership.Box Tests`.`Ownership boxes preserve value semantics through shared storage`.`Nested boxes and explicit cloning preserve independent value semantics` {
     @Test
     func `struct Value round-trips through CoW`() {
         struct Pair: Equatable {
@@ -157,7 +167,7 @@ extension `Ownership boxes preserve value semantics through shared storage`.`Nes
     }
 }
 
-extension `Ownership boxes preserve value semantics through shared storage`.`Ownership boxes share noncopyable payloads and destroy them exactly once` {
+extension `Ownership.Box Tests`.`Ownership boxes preserve value semantics through shared storage`.`Ownership boxes share noncopyable payloads and destroy them exactly once` {
     final class Recorder {
         var destroyed = 0
     }
@@ -209,25 +219,27 @@ extension `Ownership boxes preserve value semantics through shared storage`.`Own
     }
 }
 
-@Suite
-struct `Sendable box copies detach before concurrent mutation` {
-    @Test
-    func `sendable copies detach before concurrent mutation`() async {
-        let original = Ownership.Box<[Int]>([0])
-        let results = await withTaskGroup(of: [Int].self) { group in
-            for value in 1...32 {
-                group.addTask {
-                    var local = original
-                    local.value.append(value)
-                    return local.value
+extension `Ownership.Box Tests` {
+    @Suite
+    struct `Sendable box copies detach before concurrent mutation` {
+        @Test
+        func `sendable copies detach before concurrent mutation`() async {
+            let original = Ownership.Box<[Int]>([0])
+            let results = await withTaskGroup(of: [Int].self) { group in
+                for value in 1...32 {
+                    group.addTask {
+                        var local = original
+                        local.value.append(value)
+                        return local.value
+                    }
                 }
+                var values: [[Int]] = []
+                for await value in group { values.append(value) }
+                return values
             }
-            var values: [[Int]] = []
-            for await value in group { values.append(value) }
-            return values
+            #expect(original.value == [0])
+            #expect(results.count == 32)
+            #expect(Set(results) == Set((1...32).map { [0, $0] }))
         }
-        #expect(original.value == [0])
-        #expect(results.count == 32)
-        #expect(Set(results) == Set((1...32).map { [0, $0] }))
     }
 }
