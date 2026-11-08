@@ -3,9 +3,9 @@ extension Ownership.Transfer.Erased.Outgoing {
     @safe
     package struct Header {
 
-        package let destroyPayload: (UnsafeMutableRawPointer, Int) -> Void
+        let destroyPayload: (UnsafeMutableRawPointer, Int) -> Void
 
-        package let payloadOffset: Int
+        let payloadOffset: Int
 
         package init(
             payloadOffset: Int,
