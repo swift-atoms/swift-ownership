@@ -77,7 +77,9 @@ extension `Ownership.Transfer Tests`.`Transfer wrappers preserve payloads refere
     }
 }
 
-extension `Ownership.Transfer Tests`.`Transfer wrappers preserve payloads reference identity and release behavior`.`Outgoing retained transfers preserve object identity and release abandoned references` {
+extension `Ownership.Transfer Tests`.`Transfer wrappers preserve payloads reference identity and release behavior`
+    .`Outgoing retained transfers preserve object identity and release abandoned references`
+{
     @Test
     func `consume() returns the strong reference`() {
         final class Node {
