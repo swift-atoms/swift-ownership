@@ -63,4 +63,35 @@ extension `Ownership.Transfer.Erased Tests`.`Erased transfers preserve boxed pay
         let value: Int? = unsafe incoming.consume(Int.self)
         #expect(value == nil)
     }
+
+    @Test
+    func `dropping an incoming transfer that holds a stored payload destroys it`() {
+        final class Sentinel: Sendable {}
+        weak var probe: Sentinel?
+        do {
+            let sentinel = Sentinel()
+            probe = sentinel
+            let incoming = Ownership.Transfer.Erased.`Incoming`()
+            let raw = unsafe Ownership.Transfer.Erased.`Outgoing`.make(sentinel)
+            unsafe incoming.token.store(raw)
+            _ = consume incoming
+        }
+
+        #expect(probe == nil)
+    }
+
+    @Test
+    func `a payload stored through a token that outlives its incoming transfer is destroyed`() {
+        final class Sentinel: Sendable {}
+        weak var probe: Sentinel?
+        do {
+            let sentinel = Sentinel()
+            probe = sentinel
+            let token = Ownership.Transfer.Erased.`Incoming`().token
+            let raw = unsafe Ownership.Transfer.Erased.`Outgoing`.make(sentinel)
+            unsafe token.store(raw)
+        }
+
+        #expect(probe == nil)
+    }
 }
