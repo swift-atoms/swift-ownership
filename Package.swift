@@ -29,7 +29,10 @@ let package = Package(
             dependencies: [
                 .product(name: "Tagged", package: "swift-tagged")
             ],
-            path: "Sources/Ownership"
+            path: "Sources/Ownership",
+            swiftSettings: [
+                .enableExperimentalFeature("BuiltinModule")
+            ]
         ),
 
         .target(

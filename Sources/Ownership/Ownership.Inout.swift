@@ -1,3 +1,5 @@
+import Builtin
+
 extension Ownership {
 
     @safe
@@ -23,7 +25,7 @@ extension Ownership.Inout where Value: ~Copyable {
     @_lifetime(&value)
     public init(mutating value: inout Value) {
 
-        unsafe (_pointer = withUnsafeMutablePointer(to: &value) { UnsafeMutableRawPointer($0) })
+        unsafe (_pointer = UnsafeMutableRawPointer(Builtin.unprotectedAddressOf(&value)))
     }
 }
 
